@@ -1,0 +1,30 @@
+.banner {
+    background-color: #007bff; /* Couleur de fond de la bannière */
+    padding: 10px 0; /* Espacement intérieur en haut et en bas */
+
+    display: flex;
+    justify-content: space-between; /* Aligner les éléments à gauche et à droite */
+    align-items: center; /* Aligner les éléments verticalement au centre */
+}
+
+.banner .left {
+    display: flex;
+    align-items: center;
+}
+
+.banner .right {
+    display: flex;
+    align-items: center;
+}
+
+.banner button {
+    background-color: transparent; /* Bouton sans fond */
+    border: none;
+    color: white; /* Couleur du texte */
+    cursor: pointer;
+    margin: 0 10px; /* Espacement horizontal entre les boutons */
+}
+
+.banner button:hover {
+    text-decoration: underline; /* Souligner le texte au survol */
+}

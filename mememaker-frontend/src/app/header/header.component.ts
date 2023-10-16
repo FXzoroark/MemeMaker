@@ -13,7 +13,7 @@ export class HeaderComponent {
     // Logique pour la page "Log in"
   }
 
-  customAction() {
+  goToHome() {
     // Logique pour le bouton personnalisé
   }
 }
