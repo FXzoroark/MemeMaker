@@ -1,0 +1,12 @@
+<h2 mat-dialog-title >Create a new meme</h2>
+
+<mat-dialog-content>
+    <form novalidate [formGroup]="form">
+        <mat-card #container> 
+            <canvas #canvas>
+            </canvas>
+            <app-dragbox [dragboxData] = "dragboxesDataInit[i]" (updateDragboxData) = "updateDragboxData($event)" *ngFor="let _ of dragboxesDataInit; let i = index"></app-dragbox>
+        </mat-card> 
+    </form>
+    
+</mat-dialog-content>

@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Choose your template</h2>
+
+<mat-dialog-content>
+    <form novalidate [formGroup]="form">
+        <mat-form-field>
+            <mat-select formControlName="blank_meme" required>
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let blankmeme of blanksmemes" [value]="blankmeme">
+                    <img width="30" height="30" [src]="imgMemes[blankmeme.id!]" [alt]="blankmeme.title">
+                    {{blankmeme.title}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('blank_meme')?.dirty && form.get('blank_meme')?.hasError('required')">
+                Template Required
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-button color="primary" type="submit" (click)="submit(form.value)" [disabled]="form.invalid">Save</button>
+</mat-dialog-actions>

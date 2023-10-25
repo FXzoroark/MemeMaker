@@ -1,0 +1,15 @@
+server:
+  host: 0.0.0.0
+  port: 3000
+  cors:
+    - "http://0.0.0.0:4200"
+    - "http://127.0.0.1:4200"
+    - "http://localhost:4200"
+swagger:
+  title: Memes API
+  description: The Memes API of the MemeMaker app
+  version: 1.0
+  tag: memes
+  path: documentation
+mongodb:
+  uri: mongodb+srv://dbUser:dbUser@cluster0.fvrfwzh.mongodb.net/MemeMaker?retryWrites=true&w=majority

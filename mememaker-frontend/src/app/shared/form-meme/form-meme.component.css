@@ -1,0 +1,10 @@
+mat-card{
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+}
+canvas{
+    position: relative;
+    top: 0;
+    left: 0;
+}
