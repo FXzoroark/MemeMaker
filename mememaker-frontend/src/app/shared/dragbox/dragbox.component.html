@@ -1,4 +1,4 @@
-
+<!-- problème a l'init la translation ce fait avant la rotation donc le dragbox n'est pas au bonne endroit -->
 <div class="target" #targetRef [ngStyle]="{transform: 'rotate(' + dragboxData.rot + 'deg)', left: dragboxData.left + 'px', top: dragboxData.top + 'px', width:dragboxData.width + 'px', height: dragboxData.height + 'px'}"></div>
 <ngx-moveable
     #moveableRef
@@ -15,7 +15,6 @@
     [rotatable]="rotatable"
     [throttleRotate]="throttleRotate"
     [rotationPosition]="rotationPosition"
-    [persistData]="({left:500})"
     [snappable]="snappable"
     [bounds]="bounds"
     [origin]="origin"

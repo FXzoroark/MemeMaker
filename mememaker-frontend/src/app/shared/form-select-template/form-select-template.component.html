@@ -3,14 +3,14 @@
 <mat-dialog-content>
     <form novalidate [formGroup]="form">
         <mat-form-field>
-            <mat-select formControlName="blank_meme" required>
+            <mat-select formControlName="blankMeme" required>
                 <mat-option>--</mat-option>
-                <mat-option *ngFor="let blankmeme of blanksmemes" [value]="blankmeme">
-                    <img width="30" height="30" [src]="imgMemes[blankmeme.id!]" [alt]="blankmeme.title">
-                    {{blankmeme.title}}
+                <mat-option *ngFor="let blankMeme of blanksMemes" [value]="blankMeme">
+                    <img width="30" height="30" [src]="memesImgUrls[blankMeme.id!]" [alt]="blankMeme.title">
+                    {{blankMeme.title}}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('blank_meme')?.dirty && form.get('blank_meme')?.hasError('required')">
+            <mat-error *ngIf="form.get('blankMeme')?.dirty && form.get('blankMeme')?.hasError('required')">
                 Template Required
             </mat-error>
         </mat-form-field>
@@ -19,5 +19,5 @@
 
 <mat-dialog-actions align="end">
     <button mat-button type="button" (click)="cancel()">Cancel</button>
-    <button mat-button color="primary" type="submit" (click)="submit(form.value)" [disabled]="form.invalid">Save</button>
+    <button mat-button color="primary" type="submit" (click)="submit(form.value.blankMeme)" [disabled]="form.invalid">Save</button>
 </mat-dialog-actions>

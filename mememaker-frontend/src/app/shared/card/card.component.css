@@ -1,12 +1,16 @@
-mat-card{
+/* mat-card{
     position: relative;
     width: fit-content;
     height: fit-content;
     max-width: 100%;
     max-height: 100%;
-}
+} */
 canvas{
     position: relative;
+    width: fit-content;
+    height: fit-content;
+    max-width: 100%;
+    max-height: 100%;
     top: 0;
     left: 0;
     /* max-width: 100%;
@@ -21,19 +25,7 @@ canvas{
     /* text-align: left; */
     /position: relative; 
 }
-/* .container canvas{
-    max-width: 100%;
-    max-height: 100%;
-    position: relative;
-    left: 0;
-    top: 0; 
-} */
 
 .full-width {
     width: 100%;
   }
-
-@font-face {
-    font-family: 'Impact';
-    src: url('https://fonts.cdnfonts.com/css/impact');
-}

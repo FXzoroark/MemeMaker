@@ -1,1 +1,1 @@
-<app-form-meme></app-form-meme>
+<app-form-meme (submit)="onSave($event)"  (cancel)="onCancel()" [memeSelected]="memeSelected"></app-form-meme>

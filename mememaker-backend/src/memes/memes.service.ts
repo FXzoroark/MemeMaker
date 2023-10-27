@@ -14,6 +14,18 @@ export class MemesService {
     }
 
     /**
+     * Returns all existing memes in the list
+     * 
+     * @returns {Observable<MemeEntity[] | void>}
+     */
+    findAll = (): Observable<MemeEntity[] | void> =>
+        this._memesDao.findAll().pipe(
+            filter(Boolean),
+            map((memes) => (memes || []).map((meme) => new MemeEntity(meme))),
+            defaultIfEmpty(undefined),
+            );
+
+    /**
      * Returns all existing blanks memes in the list
      * 
      * @returns {Observable<MemeEntity[] | void>}
@@ -50,8 +62,9 @@ export class MemesService {
      * 
      * @returns {Observable<MemeEntity>}
      */
-    updatePath = (id:string, path: string): Observable<MemeEntity> =>
-        this._memesDao.updatePath(id, path).pipe(
+    updatePath = (id:string, path: string): Observable<MemeEntity> =>{
+
+        return this._memesDao.updatePath(id, path).pipe(
             catchError(
                 (e) => throwError(() => new UnprocessableEntityException(e.message)),
             ),
@@ -61,5 +74,8 @@ export class MemesService {
               : throwError(
                   () => new NotFoundException(`Meme with id '${id}' not found`),
                 ),
-          ),        )
+          ),        
+          )
+    }
+
 }

@@ -1,0 +1,26 @@
+<mat-card class="mat-whiteframe-2dp">
+    <mat-card-title-group>
+        <div class="container" #container>
+            <canvas #canvas>
+            </canvas>
+        </div>
+        <mat-card-title>
+            <a href="javascript:void(0);">
+              <span>{{meme.title}}</span>
+            </a>
+        </mat-card-title>
+        <mat-card-subtitle *ngIf="meme.description">{{ meme.description }}</mat-card-subtitle>
+
+    </mat-card-title-group>
+    <mat-card-content>
+      <div class="buttons-info">
+        <a mat-button title="Edit" [routerLink]="['/edit', meme.id]">
+          <mat-icon svgIcon="icon-edit"></mat-icon>
+        </a>
+        <button mat-button title="Delete" >
+          <mat-icon svgIcon="icon-delete"></mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

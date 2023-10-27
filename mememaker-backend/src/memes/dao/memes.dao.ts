@@ -4,7 +4,6 @@ import { Meme } from "../schemas/meme.schema";
 import { Model } from "mongoose";
 import { Observable, from, map, of, tap, throwIfEmpty } from "rxjs";
 import { CreateMemeDTO } from "../dto/create-meme.dto";
-import path from "path";
 
 
 @Injectable()
@@ -19,6 +18,14 @@ export class MemesDao{
     private readonly _memeModel: Model<Meme>,
   ) {}
 
+    /**
+   * Call mongoose method, call toJSON on each result and returns MemeModel[]
+   *
+   * @return {Observable<Meme[]>}
+   */
+  findAll = (): Observable<Meme[]> =>
+    from(this._memeModel.find({id_blank: {$exists: true}})).pipe(map((memes) => [].concat(memes)));
+  
   /**
    * Call mongoose method, call toJSON on each result and returns MemeModel[]
    *
@@ -34,7 +41,7 @@ export class MemesDao{
    *
    * @return {Observable<Meme>}
    */
-    save = (meme: CreateMemeDTO): Observable<Meme> =>
+   save = (meme: CreateMemeDTO): Observable<Meme> =>
     from(new this._memeModel(meme).save());
 
     /**

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Meme } from '../types/meme.type';
+import { MemeSelected } from '../types/meme-selected.type';
 
 @Component({
   selector: 'app-dialog-select-template',
@@ -11,16 +11,14 @@ export class DialogSelectTemplateComponent{
 
 
   constructor(
-    private _dialogRef: MatDialogRef<DialogSelectTemplateComponent, Meme>,
+    private _dialogRef: MatDialogRef<DialogSelectTemplateComponent, MemeSelected>,
     ){}
-
-
 
   onCancel(): void{
     this._dialogRef.close();
   }
 
-  onSave(meme: Meme): void{
-    this._dialogRef.close(meme);
+  onSave(data: any): void{
+    this._dialogRef.close(data);
   }
 }

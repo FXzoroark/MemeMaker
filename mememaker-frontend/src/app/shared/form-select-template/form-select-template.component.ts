@@ -3,6 +3,7 @@ import { MemesService } from '../services/memes.service';
 import { Meme } from '../types/meme.type';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import { MemeSelected } from '../types/meme-selected.type';
 
 @Component({
   selector: 'app-form-select-template',
@@ -11,30 +12,30 @@ import { environment } from 'src/environments/environment';
 })
 export class FormSelectTemplateComponent implements AfterViewInit {
 
-  private _blanksmemes: Meme[];
-  private _imgMemes: any;
+  private _blanksMemes: Meme[];
+  private _memesImgUrls: any;
   private readonly _cancel$: EventEmitter<void>;
-  private readonly _submit$: EventEmitter<Meme>;
+  private readonly _submit$: EventEmitter<MemeSelected>;
   private readonly _form: FormGroup;
   private readonly _environment;
 
   constructor(
     private _memesService: MemesService,
   ){
-    this._blanksmemes = [];
-    this._imgMemes = {}
-    this._submit$ = new EventEmitter<Meme>();
+    this._blanksMemes = [];
+    this._memesImgUrls = {}
+    this._submit$ = new EventEmitter<MemeSelected>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
     this._environment = environment;
   }
 
-  get blanksmemes(): Meme[]{
-    return this._blanksmemes;
+  get blanksMemes(): Meme[]{
+    return this._blanksMemes;
   }
 
-  get imgMemes(): any{
-    return this._imgMemes;
+  get memesImgUrls(): any{
+    return this._memesImgUrls;
   }
   
   get form(): FormGroup{
@@ -51,41 +52,39 @@ export class FormSelectTemplateComponent implements AfterViewInit {
   }
 
   @Output('submit')
-  get submit$(): EventEmitter<Meme> {
+  get submit$(): EventEmitter<MemeSelected> {
     return this._submit$;
   }
 
   ngAfterViewInit(): void {
-    //this._memesService.fetchCanva("ds")
     this._memesService
     .fetchBlanks()
     .subscribe({next: (memes: Meme[]) => {
-      this._blanksmemes = memes
-      this._blanksmemes.forEach(element => {
-        fetch("http://0.0.0.0:3000" + element.path)
-        .then(res => res.blob())
-        .then(blob =>{
-          let img = URL.createObjectURL(blob);
-          this._imgMemes[element.id!] = img
-          console.log(this._imgMemes)
-        });
-      });
+      this._blanksMemes = memes
+      this._blanksMemes.forEach(element => {
+        this._memesService.fetchCanva(element.path!)
+        .subscribe({
+          next: (res: Blob) => {
+            let img = URL.createObjectURL(res)
+            this._memesImgUrls[element.id!] = img;
+          }
+        })
+       });
     }});
   }
 
   cancel(): void{
-    console.log(this._blanksmemes)
     this._cancel$.emit();
   }
 
   submit(meme: Meme): void{
-    this._submit$.emit(meme);
+    this._submit$.emit({meme: meme, canvaUrl: (this._memesImgUrls[meme.id!]).slice()});
   }
 
 
   private _buildForm(): FormGroup{
     return new FormGroup({
-      blank_meme: new FormControl<Meme | null>(null, Validators.compose([Validators.required]))
+      blankMeme: new FormControl<Meme | null>(null, Validators.compose([Validators.required]))
     })
   }
 

@@ -2,11 +2,51 @@
 
 <mat-dialog-content>
     <form novalidate [formGroup]="form">
-        <mat-card #container> 
-            <canvas #canvas>
-            </canvas>
-            <app-dragbox [dragboxData] = "dragboxesDataInit[i]" (updateDragboxData) = "updateDragboxData($event)" *ngFor="let _ of dragboxesDataInit; let i = index"></app-dragbox>
-        </mat-card> 
+        <table class="full-width" cellspacing="0">
+            <tr>
+                <td>
+                    <div class="container" #container>
+                        <mat-card>
+                            <canvas #canvas>
+                            </canvas> 
+                            <app-dragbox [dragboxData] = "dragboxDatas" (updateDragboxData) = "updateDragboxData($event)" *ngFor="let dragboxDatas of dragboxesDatasInit; let i = index"></app-dragbox>
+                        </mat-card>
+                    </div> 
+                </td>
+                <td>
+                    <mat-form-field class="full-width" [class.mgb15]="form.get('title')?.dirty && form.get('title')?.invalid">
+                        <input matInput placeholder="Title" formControlName="title" minlength="2" required name="title" />
+                        <mat-error *ngIf="form.get('title')?.dirty && form.get('title')?.hasError('required')">
+                            Title is <strong>required</strong>
+                        </mat-error>
+                        <mat-error *ngIf="form.get('title')?.dirty && form.get('title')?.hasError('minlength')">
+                            Title is <strong>2 chars min</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width" [class.mgb15]="form.get('description')?.dirty && form.get('description')?.invalid">
+                        <input matInput placeholder="Description" formControlName="description" name="description" />
+                    </mat-form-field>
+                    <ng-container formArrayName="dragboxInputs">
+                        <ng-container  *ngFor="let dragboxInput of dragboxInputs.controls; let i = index" class="full-width" >
+                            <div [formGroupName]="i">
+                                <mat-form-field [class.mgb15]="dragboxInput?.dirty && dragboxInput?.invalid">
+                                    <input matInput placeholder="DragBox {{i}}" formControlName="content" required (input)="change($event,i)" />
+                                    <mat-error *ngIf="dragboxInput?.dirty && dragboxInput?.hasError('required')">
+                                        Dragbox content is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </td>
+            </tr>
+        </table>
     </form>
     
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-button color="primary" type="submit" (click)="submit(form.value)" [disabled]="form.invalid">Save</button>
+</mat-dialog-actions>

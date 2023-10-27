@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild, EventEmitter, Output, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, EventEmitter, Output, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DragboxData } from '../types/dragboxData.type';
 import { NgxMoveableComponent } from 'ngx-moveable'
 
@@ -53,12 +53,14 @@ export class DragboxComponent{
   
   onRender(e: any){
     e.target.style.transform = e.transform
-    const data = (e.transform).match(/-?[\d\.]+/g)
     const rect = e.moveable.getRect();
 
-    let width = Math.round(parseInt(e.target.style.width)   * parseFloat(data[3]))
-    let height = Math.round(parseInt(e.target.style.height) * parseFloat(data[4]))
+    //const style = window.getComputedStyle(this.targetRef.nativeElement)
+    //const matrix = new DOMMatrixReadOnly(style.transform)
 
+    let width = Math.sqrt(Math.pow(rect.pos1[0] - rect.pos2[0], 2) + Math.pow(rect.pos1[1] - rect.pos2[1], 2))
+    let height = Math.sqrt(Math.pow(rect.pos1[0] - rect.pos3[0], 2) + Math.pow(rect.pos1[1] - rect.pos3[1], 2))
+    console.log(this._dragboxData)
     this.update$.emit({...this._dragboxData, left: rect.pos1[0], top: rect.pos1[1], rot: rect.rotation, width: width, height: height });
   }
 }

@@ -5,6 +5,9 @@ import { Meme } from '../shared/types/meme.type';
 import { DialogMemeComponent } from '../shared/dialog-meme/dialog-meme.component';
 import { MemesService } from '../shared/services/memes.service';
 import { DialogSelectTemplateComponent } from '../shared/dialog-select-template/dialog-select-template.component';
+import { Observable, Subject, filter, map, mergeMap, pluck } from 'rxjs';
+import { MemeSelected } from '../shared/types/meme-selected.type';
+import { MemeToCreate } from '../shared/types/meme-to-create.type';
 
 @Component({
   selector: 'app-memes',
@@ -13,8 +16,8 @@ import { DialogSelectTemplateComponent } from '../shared/dialog-select-template/
 })
 export class MemesComponent implements OnInit {
   private _memes: Meme[];
-  private _selectTemplateDialog: MatDialogRef<DialogSelectTemplateComponent, Meme> | undefined;
-  private _memeDialog: MatDialogRef<DialogMemeComponent, Meme> | undefined;
+  private _selectTemplateDialog: MatDialogRef<DialogSelectTemplateComponent, MemeSelected> | undefined;
+  private _memeDialog: MatDialogRef<DialogMemeComponent, MemeToCreate> | undefined;
 
   private _dialogStatus: string;
 
@@ -34,11 +37,14 @@ export class MemesComponent implements OnInit {
       return this._dialogStatus;
     }
 
+    get memes(): Meme[]{
+      return this._memes
+    }
+
     ngOnInit(): void {
-        // this._memesService
-        //     .fetchBlanks()
-        //     .subscribe({next: (memes: Meme[]) => (this._memes = memes)})
-        // console.log(this._memes)
+        this._memesService
+            .fetchMemes()
+            .subscribe({next: (memes: Meme[]) => (this._memes = memes)})
     }
 
     showDialog(): void {
@@ -51,31 +57,45 @@ export class MemesComponent implements OnInit {
         disableClose: true,
       });
 
-      // open modal
-      // this._memeDialog = this._dialog.open(DialogMemeComponent, {
-      //   position:{left: "15%"},
-      //   width: '70%',
-      //   disableClose: true,
-      // });
-  
+
       // subscribe to afterClosed observable to set dialog status and do process
       this._selectTemplateDialog
         .afterClosed()
-        // .pipe(
-        //   filter((person: Person | undefined) => !!person),
-        //   map((person: Person | undefined) => {
-        //     // delete obsolete attributes in original object which are not required in the API
-        //     delete person?.id;
-        //     delete person?.photo;
-  
-        //     return person;
-        //   }),
-        //   mergeMap((person: Person | undefined) => this._add(person))
-        // )
-        // .subscribe({
-        //   next: (person: Person) => (this._people = this._people.concat(person)),
-        //   error: () => (this._dialogStatus = 'inactive'),
-        //   complete: () => (this._dialogStatus = 'inactive'),
-        // });
+        .pipe(
+          filter((memeSelected: MemeSelected | undefined) => !!memeSelected)
+        )
+        .subscribe({
+          next: (memeSelected: MemeSelected | undefined) =>{
+
+            this._memeDialog = this._dialog.open(DialogMemeComponent, {
+              position:{left: "20%"},
+              width: '60%',
+              disableClose: true,
+              data: memeSelected
+            });
+
+            this._memeDialog
+                .afterClosed()
+                .pipe(
+                  filter((memeToCreate: MemeToCreate | undefined) => !!memeToCreate),
+                  mergeMap((memeToCreate: MemeToCreate | undefined) => (this._add(memeToCreate as MemeToCreate)))                  
+                )
+                .subscribe({
+                  next: (meme: Meme) => {console.log("add a la liste des memes")}
+                })
+          },
+          error: () => (this._dialogStatus = 'inactive'),
+          complete: () => (this._dialogStatus = 'inactive')
+        });
     }
+
+    private _add(memeToCreate: MemeToCreate): Observable<Meme>{
+      return this._memesService.create(memeToCreate.meme).pipe(
+        map((meme: Meme) =>{
+          memeToCreate.canvas.toBlob((blob)=> this._memesService.upload(meme.id!, blob!).subscribe())
+          return meme
+        })
+      )
+    }
+
 }

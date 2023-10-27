@@ -11,7 +11,7 @@ export class MemeDragboxDatasEntity {
     })
     @Expose()
     @Type(() => String)
-    _id: string;
+    id: string;
 
     @ApiProperty({
         name:"left",
@@ -65,5 +65,5 @@ export class MemeDragboxDatasEntity {
     })
     @Expose()
     @Type(() => String)
-    content?: string;
+    content: string;
 }

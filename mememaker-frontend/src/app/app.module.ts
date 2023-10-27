@@ -24,6 +24,7 @@ import { DialogSelectTemplateComponent } from './shared/dialog-select-template/d
 import { DialogMemeComponent } from './shared/dialog-meme/dialog-meme.component';
 import { FormMemeComponent } from './shared/form-meme/form-meme.component';
 import { FormSelectTemplateComponent } from './shared/form-select-template/form-select-template.component';
+import { CardComponent } from './shared/card/card.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { FormSelectTemplateComponent } from './shared/form-select-template/form-
     DialogSelectTemplateComponent,
     DialogMemeComponent,
     FormMemeComponent,
-    FormSelectTemplateComponent
+    FormSelectTemplateComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

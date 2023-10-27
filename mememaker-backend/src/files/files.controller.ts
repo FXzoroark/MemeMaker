@@ -37,9 +37,9 @@ export class FilesController {
       }),
     )
     upload(@Req() req: Request, @UploadedFile() file: Express.Multer.File, @Body() body: SingleFileDto,) {
-        let file_path = `custom/${body.id}${extname(file.originalname)}`;
-        fs.rename(`./upload/custom/${file.originalname.split('.')[0]}${extname(file.originalname)}`, `./upload/${file_path}`, () => {})
-        this._memesService.updatePath(body.id, file_path)
+        let file_path = `/custom/${body.id}${extname(file.originalname)}`;
+        fs.rename(`./upload/custom/${file.originalname.split('.')[0]}${extname(file.originalname)}`, `./upload${file_path}`, () => {})
+        this._memesService.updatePath(body.id, file_path).subscribe();
         return { ...body, canva: fileMapper({ file_path, req }) };
     }
 }

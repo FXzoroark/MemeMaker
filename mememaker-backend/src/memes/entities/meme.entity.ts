@@ -2,6 +2,7 @@ import { Exclude, Expose, Type } from "class-transformer";
 import { MemeDragboxDatasEntity } from "./meme-dragbox-datas.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Meme } from "../schemas/meme.schema";
+import { DragboxDatas } from "../memes.types";
 
 
 @Exclude()
@@ -59,6 +60,6 @@ export class MemeEntity {
         this.title = partial.title;
         this.description = partial.description;
         this.path = partial.path;
-        this.dragboxesDatas = partial.dragboxesDatas;
+        this.dragboxesDatas = partial.dragboxesDatas.map((datas) => ({id: datas._id, left: datas.left, top: datas.top, rot: datas.rot, width: datas.width, height: datas.height, content: datas.content || ""}))
     }
 }

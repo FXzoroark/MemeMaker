@@ -53,7 +53,7 @@ export class Meme {
         rot: {type: Number, required: true},
         width: {type: Number, required: true},
         height: {type: Number, required: true},
-        content: {type: String},
+        content: {type: String,},
       }]
     })
     dragboxesDatas: {_id:any, left: number, top: number, rot: number, width: number, height: number, content?: string}[];

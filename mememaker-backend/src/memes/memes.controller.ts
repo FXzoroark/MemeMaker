@@ -16,7 +16,22 @@ export class MemesController {
      * @param _memesService
      */
     constructor(private readonly _memesService: MemesService){}
-    
+
+    /**
+     * Handler to answer to GET /memes route
+     * 
+     * @returns Observable<MemeEntity[]>
+     */
+    @ApiOkResponse({
+        description: 'Returns an array of meme',
+        type: MemeEntity,
+        isArray: true,
+    })
+    @ApiNoContentResponse({description: 'No meme exists in database'})
+    @Get()
+    findAll(): Observable<MemeEntity[] | void>{
+        return this._memesService.findAll();
+    }
     /**
      * Handler to answer to GET /memes/blanks route
      * 
