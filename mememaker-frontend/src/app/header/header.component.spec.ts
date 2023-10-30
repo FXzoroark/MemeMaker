@@ -31,7 +31,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should have signIn and logIn methods', () => {
-    expect(component.signIn).toBeDefined();
-    expect(component.logIn).toBeDefined();
+    expect(component.onSignIn).toBeDefined();
+    expect(component.onLogIn).toBeDefined();
   });
 });

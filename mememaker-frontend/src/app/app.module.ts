@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon';
 
 import { NgxMoveableModule } from 'ngx-moveable';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -25,6 +25,7 @@ import { DialogMemeComponent } from './shared/dialog-meme/dialog-meme.component'
 import { FormMemeComponent } from './shared/form-meme/form-meme.component';
 import { FormSelectTemplateComponent } from './shared/form-select-template/form-select-template.component';
 import { CardComponent } from './shared/card/card.component';
+import { AuthService } from './shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -52,8 +53,9 @@ import { CardComponent } from './shared/card/card.component';
     MatSelectModule,
     MatFormFieldModule,
     NgxMoveableModule,
+    FormsModule,
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
