@@ -5,7 +5,7 @@ import { Meme } from '../shared/types/meme.type';
 import { DialogMemeComponent } from '../shared/dialog-meme/dialog-meme.component';
 import { MemesService } from '../shared/services/memes.service';
 import { DialogSelectTemplateComponent } from '../shared/dialog-select-template/dialog-select-template.component';
-import { Observable, Subject, filter, map, mergeMap, pluck } from 'rxjs';
+import { Observable, Subject, filter, map, mergeMap, of, pluck } from 'rxjs';
 import { MemeSelected } from '../shared/types/meme-selected.type';
 import { MemeToCreate } from '../shared/types/meme-to-create.type';
 
@@ -81,7 +81,9 @@ export class MemesComponent implements OnInit {
                   mergeMap((memeToCreate: MemeToCreate | undefined) => (this._add(memeToCreate as MemeToCreate)))                  
                 )
                 .subscribe({
-                  next: (meme: Meme) => {console.log("add a la liste des memes")}
+                  next: (meme: Meme) => { console.log("ajouter le meme")},
+                  error: () => (this._dialogStatus = 'inactive'),
+                  complete: () => (this._dialogStatus = 'inactive')
                 })
           },
           error: () => (this._dialogStatus = 'inactive'),
@@ -92,7 +94,7 @@ export class MemesComponent implements OnInit {
     private _add(memeToCreate: MemeToCreate): Observable<Meme>{
       return this._memesService.create(memeToCreate.meme).pipe(
         map((meme: Meme) =>{
-          memeToCreate.canvas.toBlob((blob)=> this._memesService.upload(meme.id!, blob!).subscribe())
+          memeToCreate.canvas.toBlob((blob)=> {this._memesService.upload(meme.id!, blob!)})
           return meme
         })
       )

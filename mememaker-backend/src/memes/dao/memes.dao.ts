@@ -33,7 +33,7 @@ export class MemesDao{
    */
   findAllBlanks = (): Observable<Meme[]> =>
     from(this._memeModel.find({id_blank: {$exists: false}})).pipe(map((memes) => [].concat(memes)));
-  
+
   /**
    * add meme it in memes list
    *

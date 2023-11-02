@@ -9,6 +9,7 @@ export const environment = {
             allBlanks: '/memes/blanks',
             blankCanvas: '/blank',
             allMemes: '/memes',
+            oneMeme: '/memes/:id',
             uploadMeme: '/files/upload'
 
         }

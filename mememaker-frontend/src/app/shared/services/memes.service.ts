@@ -43,6 +43,12 @@ export class MemesService {
     );
   }
 
+  fetchOne(memeId: string): Observable<Meme>{
+    return this._http.get<Meme>(
+      this._backendURL.oneMeme.replace(':id', memeId)
+    )
+  }
+
   fetchCanva(path: string): Observable<Blob>{
     return this._http.get(this._backendURL.base+path, {responseType: 'blob'}).pipe(
       filter((file: Blob) => !!file),

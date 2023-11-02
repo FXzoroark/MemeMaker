@@ -36,7 +36,27 @@ export class MemesService {
             map((memes) => (memes || []).map((meme) => new MemeEntity(meme))),
             defaultIfEmpty(undefined),
             );
-
+    
+    /**
+     * Returns one meme of the list matching id in parameter
+     *
+     * @param {string} id of the meme
+     *
+     * @returns {Observable<MemeEntity>}
+     */
+    findOne = (id: string): Observable<MemeEntity> =>
+        this._memesDao.findById(id).pipe(
+        catchError((e) =>
+            throwError(() => new UnprocessableEntityException(e.message)),
+        ),
+        mergeMap((meme) =>
+            !!meme
+            ? of(new MemeEntity(meme))
+            : throwError(
+                () => new NotFoundException(`Meme with id '${id}' not found`),
+                ),
+        ),
+    );
 
     
     /**

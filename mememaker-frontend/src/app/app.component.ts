@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-root',
@@ -9,7 +11,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class AppComponent {
   title = 'mememaker-frontend';
 
-  constructor(private _domSanitizer: DomSanitizer){
-    
+  constructor(private _matIconRegistry: MatIconRegistry, private _domSanitizer: DomSanitizer){
+    this._matIconRegistry.addSvgIcon('icon-delete', this._domSanitizer.bypassSecurityTrustResourceUrl('/assets/icon-delete.svg'));
+    this._matIconRegistry.addSvgIcon('icon-edit', this._domSanitizer.bypassSecurityTrustResourceUrl('/assets/icon-edit.svg'));
   }
 }

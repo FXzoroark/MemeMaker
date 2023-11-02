@@ -10,7 +10,7 @@ import { MemesService } from '../services/memes.service';
 })
 export class CardComponent {
 
-  @ViewChild("canvas") canvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild("img") image!: ElementRef<HTMLImageElement>;
 
   private _meme : Meme
   
@@ -25,7 +25,6 @@ export class CardComponent {
 
   @Input()
   set meme(meme: Meme){
-    console.log(meme)
     this._meme = meme;
     this._updateCanvas();
   }
@@ -34,16 +33,8 @@ export class CardComponent {
     this._memesService.fetchCanva(this.meme.path!)
     .subscribe({
       next: (res: Blob) => {
-        let img = new Image
-        img.src = URL.createObjectURL(res).toString();
-        img.onload = () => {
-          this.canvas.nativeElement.width = img.width;
-          this.canvas.nativeElement.height = img.height;
-
-          let displayedctx: any = this.canvas.nativeElement.getContext("2d");
-          displayedctx.drawImage(img, 0, 0);
-          displayedctx.save();
-        }
+        this.image.nativeElement.src = URL.createObjectURL(res).toString();
+        this.image.nativeElement.alt = this.meme.title;
       }
     })
   }

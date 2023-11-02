@@ -13,7 +13,6 @@ import { Request } from 'express';
 import { diskStorage } from 'multer';
 import { SingleFileDto } from './dto/single-file.dto';
 import { FastifyFileInterceptor } from '../interceptors/fastify-file-interceptor';
-import { fileMapper } from './utils/file-mapper';
 import { editFileName, imageFileFilter } from './utils/file-upload-util';
 import * as fs from "fs"
 import { extname } from 'path';
@@ -40,6 +39,6 @@ export class FilesController {
         let file_path = `/custom/${body.id}${extname(file.originalname)}`;
         fs.rename(`./upload/custom/${file.originalname.split('.')[0]}${extname(file.originalname)}`, `./upload${file_path}`, () => {})
         this._memesService.updatePath(body.id, file_path).subscribe();
-        return { ...body, canva: fileMapper({ file_path, req }) };
+        return { ...body, canva: file_path };
     }
 }
