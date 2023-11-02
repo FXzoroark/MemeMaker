@@ -1,5 +1,5 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
+import { Body, ClassSerializerInterceptor, Controller, Get, Delete, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Observable, filter, map, of } from 'rxjs';
 import { HttpInterceptor } from 'src/interceptors/http.interceptor';
 import { MemesService } from './memes.service';
 import { CreateMemeDTO } from './dto/create-meme.dto';
@@ -15,6 +15,7 @@ import {
     ApiTags,
     ApiUnprocessableEntityResponse,
   } from '@nestjs/swagger';import { HandlerParams } from './validators/handler-params';
+import { FileService } from 'src/files/files.service';
 
 @ApiTags('memes')
 @Controller('memes')
@@ -25,7 +26,7 @@ export class MemesController {
      * Class constructor
      * @param _memesService
      */
-    constructor(private readonly _memesService: MemesService){}
+    constructor(private readonly _memesService: MemesService, private readonly _filesService: FileService){}
 
     /**
      * Handler to answer to GET /memes route
@@ -112,5 +113,38 @@ export class MemesController {
     @Post()
     create(@Body() createMemeDTO: CreateMemeDTO): Observable<MemeEntity> {
         return this._memesService.create(createMemeDTO);
+    }
+
+    /**
+     * Handler to answer to DELETE /memes/:id route
+     * 
+     * @param {HandlerParams} param list of route params to take meme id
+     * 
+     * @returns Observable<void>
+     */
+    @ApiNoContentResponse({
+        description: 'The meme has been successfully deleted',
+    })
+    @ApiNotFoundResponse({
+        description: 'Meme with given "id" doesn\'t exist in the database',
+    })
+    @ApiUnprocessableEntityResponse({
+        description: "The request can't be performed in the database",
+    })
+    @ApiBadRequestResponse({
+         description: 'Parameter provided is not good' 
+    })
+    @ApiParam({
+        name: 'id',
+        description: 'Unique identifier of the meme in the database',
+        type: String,
+        allowEmptyValue: false,
+    })
+    @Delete(':id')
+    delete(@Param() params: HandlerParams): Observable<void> {
+    return this._memesService.delete(params.id).pipe(
+        filter((memeDeleted: MemeEntity) => !!memeDeleted),
+        map((memeDeleted: MemeEntity) => this._filesService.delete(memeDeleted.path))
+    );
     }
 }

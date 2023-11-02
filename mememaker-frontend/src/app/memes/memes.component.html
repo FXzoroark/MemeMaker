@@ -1,5 +1,5 @@
 <section>
-  <app-card [meme]="meme" *ngFor="let meme of memes"></app-card>
+  <app-card [meme]="meme" (deleteMeme)="delete($event)" *ngFor="let meme of memes"></app-card>
 </section>
 <section class="buttons-fab" *ngIf="dialogStatus === 'inactive'">
     <button (click)="showDialog()" mat-fab color="accent" class="button-add">

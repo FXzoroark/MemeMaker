@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Meme } from '../types/meme.type';
 import { Router } from '@angular/router';
 import { MemesService } from '../services/memes.service';
@@ -11,12 +11,14 @@ import { MemesService } from '../services/memes.service';
 export class CardComponent {
 
   @ViewChild("img") image!: ElementRef<HTMLImageElement>;
+  private readonly _delete$: EventEmitter<Meme>;
 
   private _meme : Meme
   
 
   constructor(private _router: Router, private _memesService: MemesService){
     this._meme = {} as Meme
+    this._delete$ = new EventEmitter<Meme>();
   }
 
   get meme(): Meme{
@@ -27,6 +29,14 @@ export class CardComponent {
   set meme(meme: Meme){
     this._meme = meme;
     this._updateCanvas();
+  }
+
+  @Output('deleteMeme') get delete$(): EventEmitter<Meme> {
+    return this._delete$;
+  }
+
+  delete(meme: Meme): void {
+    this._delete$.emit(meme);
   }
 
   private _updateCanvas(): void{

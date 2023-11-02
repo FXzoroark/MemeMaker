@@ -22,10 +22,16 @@
                         <mat-error *ngIf="form.get('title')?.dirty && form.get('title')?.hasError('minlength')">
                             Title is <strong>2 chars min</strong>
                         </mat-error>
+                        <mat-error *ngIf="form.get('title')?.dirty && form.get('title')?.hasError('maxlength')">
+                            Title is <strong>64 chars max</strong>
+                        </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="full-width" [class.mgb15]="form.get('description')?.dirty && form.get('description')?.invalid">
                         <input matInput placeholder="Description" formControlName="description" name="description" />
+                        <mat-error *ngIf="form.get('description')?.dirty && form.get('description')?.hasError('maxlength')">
+                            Description is <strong>255 chars max</strong>
+                        </mat-error>
                     </mat-form-field>
                     <ng-container formArrayName="dragboxInputs">
                         <ng-container  *ngFor="let dragboxInput of dragboxInputs.controls; let i = index" class="full-width" >

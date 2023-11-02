@@ -47,6 +47,15 @@ export class MemesComponent implements OnInit {
             .subscribe({next: (memes: Meme[]) => (this._memes = memes)})
     }
 
+    delete(meme: Meme): void {
+      this._memesService
+          .delete(meme.id!)
+          .subscribe(
+            (id:string) =>
+              (this._memes = this.memes.filter((meme: Meme) => meme.id != id))
+          )
+    }
+
     showDialog(): void {
       // set dialog status
       this._dialogStatus = 'active';
@@ -94,7 +103,7 @@ export class MemesComponent implements OnInit {
     private _add(memeToCreate: MemeToCreate): Observable<Meme>{
       return this._memesService.create(memeToCreate.meme).pipe(
         map((meme: Meme) =>{
-          memeToCreate.canvas.toBlob((blob)=> {this._memesService.upload(meme.id!, blob!)})
+          memeToCreate.canvas.toBlob((blob)=> {this._memesService.upload(meme.id!, blob!).subscribe()})
           return meme
         })
       )

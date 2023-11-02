@@ -73,7 +73,26 @@ export class MemesService {
             ),
             map((memeCreated) => new MemeEntity(memeCreated)),
         );
-    
+    /**
+     * Deletes one meme in meme custom list
+     *
+     * @param {string} id of the meme to delete
+     *
+     * @returns {Observable<MemeEntity>}
+     */
+    delete = (id: string): Observable<MemeEntity> =>
+        this._memesDao.findByIdAndRemoveCustom(id).pipe(
+        catchError((e) =>
+            throwError(() => new UnprocessableEntityException(e.message)),
+        ),
+        mergeMap((memeDeleted) =>
+            !!memeDeleted
+            ? of(new MemeEntity(memeDeleted))
+            : throwError(
+                () => new NotFoundException(`Meme with id '${id}' not found`),
+                ),
+        ),
+        );    
     /**
      * update the path of the canva of the meme with the param id
      * 

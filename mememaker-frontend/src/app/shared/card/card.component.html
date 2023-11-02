@@ -14,7 +14,7 @@
     <button mat-button title="Edit" [routerLink]="['/edit', meme.id]">
       <mat-icon svgIcon="icon-edit"></mat-icon>
     </button>
-    <button mat-button title="Delete">
+    <button mat-button title="Delete" (click)="delete(meme)">
       <mat-icon svgIcon="icon-delete"></mat-icon>
     </button>
   </mat-card-actions>

@@ -44,16 +44,35 @@ export class MemesDao{
    save = (meme: CreateMemeDTO): Observable<Meme> =>
     from(new this._memeModel(meme).save());
 
-    /**
+  /**
    * Returns one meme of the list matching id in parameter
    *
    * @param {string} id of the meme in the db
    *
    * @return {Observable<Meme | void>}
    */
-    findById = (id: string): Observable<Meme | void> =>
-      from(this._memeModel.findById(id));
+  findById = (id: string): Observable<Meme | void> =>
+    from(this._memeModel.findById(id));
 
-    updatePath = (id: string, path: string): Observable<Meme | void> =>
-      from(this._memeModel.findByIdAndUpdate({_id:id}, {path:path}));
+  /**
+   * Delete a custom meme in meme list
+   * 
+   * @param {string} id 
+   * @param {string} path 
+   * @returns {Observable<Meme | void>}
+   */
+  findByIdAndRemoveCustom = (id: string): Observable<Meme | void> =>
+    from(this._memeModel.findOneAndRemove({_id: id, id_blank: {$exists: true}}))
+  
+  /**
+   * update image path of a meme
+   * 
+   * @param {string} id 
+   * @param {string} path 
+   * @returns {Observable<Meme | void>}
+   */
+  updatePath = (id: string, path: string): Observable<Meme | void> =>
+    from(this._memeModel.findByIdAndUpdate({_id:id}, {path:path}));
+
+
 }

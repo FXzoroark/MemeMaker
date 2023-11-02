@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
-import { Observable, defaultIfEmpty, filter } from 'rxjs';
+import { Observable, defaultIfEmpty, filter, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Meme } from '../types/meme.type';
 
@@ -61,6 +61,12 @@ export class MemesService {
       newMeme,
       this._options()
     )
+  }
+
+  delete(memeId: string): Observable<string> {
+    return this._http
+               .delete(this._backendURL.oneMeme.replace(':id', memeId))
+               .pipe(map(() => memeId))
   }
 
   upload(memeId: string, blob: Blob): Observable<any>{

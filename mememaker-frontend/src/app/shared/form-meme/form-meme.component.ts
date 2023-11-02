@@ -180,9 +180,12 @@ export class FormMemeComponent implements OnChanges{
     return new FormGroup({
       title: new FormControl(
         '',
-        Validators.compose([Validators.required, Validators.minLength(2)])
+        Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(64)])
       ),
-      description: new FormControl(),
+      description: new FormControl(
+        '',
+        Validators.compose([Validators.maxLength(255)])
+      ),
       dragboxInputs: new FormArray([])
     });
   }
