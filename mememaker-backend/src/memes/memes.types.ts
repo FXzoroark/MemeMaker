@@ -3,7 +3,9 @@ export type Meme = {
     id_blank?: string;
     title: string;
     description?: string;
-    path?: string
+    creationDate: Date;
+    updateDate: Date;
+    path?: string;
     dragboxesDatas: DragboxDatas[];
 }
 

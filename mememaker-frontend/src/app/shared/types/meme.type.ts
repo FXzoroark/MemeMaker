@@ -5,6 +5,8 @@ export type Meme = {
     id_blank?: string;
     title: string;
     description?: string;
+    createdAt?: string;
+    updatedAt?: string;
     path?: string;
     dragboxesDatas: DragboxData[];
 }

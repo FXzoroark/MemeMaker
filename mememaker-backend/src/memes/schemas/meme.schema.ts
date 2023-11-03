@@ -14,6 +14,10 @@ export type MemeDocument = Meme & Document;
       },
     },
     versionKey: false,
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
+    },
   })
 
 export class Meme {
@@ -39,6 +43,16 @@ export class Meme {
       type: String,
     })
     description?: string;
+
+    @Prop({
+      type: mongoose.Schema.Types.Date,
+    })
+    created_at: Date;
+
+    @Prop({
+      type: mongoose.Schema.Types.Date,
+    })  
+    updated_at: Date;
 
     @Prop({
       type: String,

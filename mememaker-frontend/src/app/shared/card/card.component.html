@@ -3,6 +3,14 @@
     <mat-card-title>
       <span>{{meme.title}}</span>
     </mat-card-title>
+    <mat-card-subtitle>
+      <span>
+        creation: {{meme.createdAt | date :'dd/MM/yyyy'}};
+      </span>
+      <span *ngIf="this.isUpdateDateShowable()">
+        update: {{meme.updatedAt | date: 'dd/MM/yyyy'}};
+      </span>
+    </mat-card-subtitle>
   </mat-card-header>
   <img mat-card-image #img src="" alt="">
   <mat-card-content *ngIf="meme.description">

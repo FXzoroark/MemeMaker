@@ -41,6 +41,24 @@ export class MemeEntity {
     @Type(() => String)
     description: string;
 
+    @ApiProperty({
+        name:"updated_at",
+        description: 'Creation date of the meme',
+        example: '101343600000'
+    })
+    @Expose()
+    @Type(() => Date)
+    createdAt: Date;
+
+    @ApiProperty({
+        name:"updated_at",
+        description: 'Update date of the meme',
+        example: '101343600000'
+    })
+    @Expose()
+    @Type(() => Date)
+    updatedAt: Date;
+
     @ApiPropertyOptional({
         name:"path",
         example:"/upload/blank/653705a7fbbb4423c8b9744f.jpg"
@@ -59,6 +77,8 @@ export class MemeEntity {
         this.id_blank = partial.id_blank
         this.title = partial.title;
         this.description = partial.description;
+        this.createdAt = partial.created_at;
+        this.updatedAt = partial.updated_at;
         this.path = partial.path;
         this.dragboxesDatas = partial.dragboxesDatas.map((datas) => ({id: datas._id, left: datas.left, top: datas.top, rot: datas.rot, width: datas.width, height: datas.height, content: datas.content || ""}))
     }

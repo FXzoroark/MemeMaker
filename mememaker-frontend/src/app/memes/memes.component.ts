@@ -57,6 +57,8 @@ export class MemesComponent implements OnInit {
     }
 
     showDialog(): void {
+      console.log(this._memes)
+
       // set dialog status
       this._dialogStatus = 'active';
       

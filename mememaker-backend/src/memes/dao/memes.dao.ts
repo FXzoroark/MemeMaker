@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Meme } from "../schemas/meme.schema";
 import { Model } from "mongoose";
-import { Observable, from, map, of, tap, throwIfEmpty } from "rxjs";
+import { Observable, from, map, of, tap, throwIfEmpty, timestamp } from "rxjs";
 import { CreateMemeDTO } from "../dto/create-meme.dto";
 
 
@@ -42,7 +42,7 @@ export class MemesDao{
    * @return {Observable<Meme>}
    */
    save = (meme: CreateMemeDTO): Observable<Meme> =>
-    from(new this._memeModel(meme).save());
+    from(new this._memeModel({...meme, creationDate: Date.now(), updateDate: Date.now()}).save());
 
   /**
    * Returns one meme of the list matching id in parameter

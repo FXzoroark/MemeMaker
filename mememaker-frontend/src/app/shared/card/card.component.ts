@@ -49,4 +49,8 @@ export class CardComponent {
     })
   }
 
+  isUpdateDateShowable(): boolean{
+    return (new Date(this._meme.updatedAt!).getTime() - new Date(this._meme.createdAt!).getTime() > 3000) //time between > 3 secs (mongodb creation date purpose)
+  }
+
 }
