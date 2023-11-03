@@ -39,6 +39,6 @@ export class FilesController {
         let file_path = `/custom/${body.id}${extname(file.originalname)}`;
         fs.rename(`./upload/custom/${file.originalname.split('.')[0]}${extname(file.originalname)}`, `./upload${file_path}`, () => {})
         this._memesService.updatePath(body.id, file_path).subscribe();
-        return { ...body, canva: file_path };
+        return { ...body, path: file_path };
     }
 }

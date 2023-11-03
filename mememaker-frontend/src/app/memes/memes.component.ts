@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Meme } from '../shared/types/meme.type';
@@ -24,7 +24,8 @@ export class MemesComponent implements OnInit {
   constructor(
     private _router: Router,
     private _memesService: MemesService,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {
     this._memes = [];
     this._dialogStatus = 'inactive';
@@ -52,7 +53,7 @@ export class MemesComponent implements OnInit {
           .delete(meme.id!)
           .subscribe(
             (id:string) =>
-              (this._memes = this.memes.filter((meme: Meme) => meme.id != id))
+              (this._memes = this._memes.filter((meme: Meme) => meme.id != id))
           )
     }
 
@@ -92,7 +93,6 @@ export class MemesComponent implements OnInit {
                   mergeMap((memeToCreate: MemeToCreate | undefined) => (this._add(memeToCreate as MemeToCreate)))                  
                 )
                 .subscribe({
-                  next: (meme: Meme) => { console.log("ajouter le meme")},
                   error: () => (this._dialogStatus = 'inactive'),
                   complete: () => (this._dialogStatus = 'inactive')
                 })
@@ -102,11 +102,13 @@ export class MemesComponent implements OnInit {
         });
     }
 
-    private _add(memeToCreate: MemeToCreate): Observable<Meme>{
+    private _add(memeToCreate: MemeToCreate): Observable<void>{
       return this._memesService.create(memeToCreate.meme).pipe(
         map((meme: Meme) =>{
-          memeToCreate.canvas.toBlob((blob)=> {this._memesService.upload(meme.id!, blob!).subscribe()})
-          return meme
+          memeToCreate.canvas.toBlob((blob) => {
+            this._memesService.upload(meme.id!, blob!)
+                              .subscribe((res) => {this._memes.push({...meme, path:res.path}); this._changeDetectorRef.detectChanges()})
+          })
         })
       )
     }
