@@ -1,27 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../shared/user/user.model';
+import { User } from '../shared/types/user.type';
 import { AuthService } from '../shared/services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogLoginComponent } from '../shared/dialog-login/dialog-login.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  user: User = { username: '', password: '' };
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, public dialog: MatDialog) {}
 
-  onSignIn(user: User) {
-    this.authService.signIn(user).subscribe((response) => {
-      // Traiter la réponse de l'authentification ici
-    });
+  onSignIn() {
+    
   }
 
-  onLogIn(user: User) {
-    this.authService.logIn(user).subscribe((response) => {
-      // Traiter la réponse de la connexion ici
+  openLoginDialog() {
+    const dialogRef = this.dialog.open(DialogLoginComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+
     });
   }
 

@@ -3,10 +3,8 @@
         <button (click)="goToHome()">Home</button>
     </div>
     <div class="right">
-        <input [(ngModel)]="user.username" placeholder="Username">
-        <input [(ngModel)]="user.password" placeholder="Password">
-        <button (click)="onSignIn(user)">Sign in</button>
-        <button (click)="onLogIn(user)">Log in</button>
+        <button (click)="onSignIn()">Sign in</button>
+        <button (click)="openLoginDialog()">Log in</button>
     </div>
 </header>
   

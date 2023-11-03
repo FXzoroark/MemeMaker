@@ -26,6 +26,7 @@ import { FormMemeComponent } from './shared/form-meme/form-meme.component';
 import { FormSelectTemplateComponent } from './shared/form-select-template/form-select-template.component';
 import { CardComponent } from './shared/card/card.component';
 import { AuthService } from './shared/services/auth.service';
+import { DialogLoginComponent } from './shared/dialog-login/dialog-login.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { AuthService } from './shared/services/auth.service';
     DialogMemeComponent,
     FormMemeComponent,
     FormSelectTemplateComponent,
-    CardComponent
+    CardComponent,
+    DialogLoginComponent
   ],
   imports: [
     BrowserModule,
