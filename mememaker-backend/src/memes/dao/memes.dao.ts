@@ -4,6 +4,7 @@ import { Meme } from "../schemas/meme.schema";
 import { Model } from "mongoose";
 import { Observable, from, map, of, tap, throwIfEmpty, timestamp } from "rxjs";
 import { CreateMemeDTO } from "../dto/create-meme.dto";
+import { UpdateMemeDTO } from "../dto/update-meme.dto";
 
 
 @Injectable()
@@ -54,6 +55,25 @@ export class MemesDao{
   findById = (id: string): Observable<Meme | void> =>
     from(this._memeModel.findById(id));
 
+  /**
+   * Update a meme in memes list
+   * 
+   * @param {string} id
+   * @param {UpdateMemeDTO} meme
+   * 
+   * @return {Observable<Meme | void>}
+   */
+  findByIdAndUpdate = (
+    id: string,
+    meme: UpdateMemeDTO
+  ): Observable<Meme | void> =>
+    from(
+      this._memeModel.findByIdAndUpdate(id, meme, {
+        new: true,
+        runValidators: true,
+      }),
+    )
+    
   /**
    * Delete a custom meme in meme list
    * 

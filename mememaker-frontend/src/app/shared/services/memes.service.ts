@@ -55,10 +55,18 @@ export class MemesService {
     );
   }
 
-  create(newMeme: Meme): Observable<any>{
+  create(newMeme: Meme): Observable<any> {
     return this._http.post<Meme>(
       this._backendURL.allMemes,
       newMeme,
+      this._options()
+    )
+  }
+
+  update(memeId: string, meme: Meme) : Observable<any> {
+    return this._http.put<Meme>(
+      this._backendURL.oneMeme.replace(":id", memeId),
+      meme,
       this._options()
     )
   }

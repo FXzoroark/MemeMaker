@@ -7,7 +7,7 @@ import { MemeSelected } from '../types/meme-selected.type';
 import { DomSanitizer } from '@angular/platform-browser';
 import { text } from 'stream/consumers';
 import { drawText } from 'canvas-txt';
-import { MemeToCreate } from '../types/meme-to-create.type';
+import { MemeToProcess } from '../types/meme-to-process.type';
 
 @Component({
   selector: 'app-form-meme',
@@ -29,20 +29,23 @@ export class FormMemeComponent implements OnChanges{
 
 
   private readonly _cancel$: EventEmitter<void>;
-  private readonly _submit$: EventEmitter<MemeToCreate>;
+  private readonly _submit$: EventEmitter<MemeToProcess>;
 
   private _form: FormGroup;
+
+  private _isUpdateMode: boolean;
 
 
   constructor(private _fb: FormBuilder){
     this._dragboxesDatasInit = [];
     this._dragboxesDatas = []
     this._memeSelected = {} as MemeSelected
-    this._submit$ = new EventEmitter<MemeToCreate>();
+    this._submit$ = new EventEmitter<MemeToProcess>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
     this._fontSize = 40;
     this._fontHeight = this._fontSize*1.286;
+    this._isUpdateMode = false;
   }
 
   @Input()
@@ -56,7 +59,7 @@ export class FormMemeComponent implements OnChanges{
   }
 
   @Output('submit')
-  get submit$(): EventEmitter<MemeToCreate> {
+  get submit$(): EventEmitter<MemeToProcess> {
     return this._submit$;
   }
 
@@ -74,6 +77,10 @@ export class FormMemeComponent implements OnChanges{
 
   get dragboxInputs(){
     return this._form.controls["dragboxInputs"] as FormArray;
+  }
+
+  get isUpdateMode(): boolean {
+    return this._isUpdateMode;
   }
   
   ngOnChanges(): void {
@@ -100,7 +107,13 @@ export class FormMemeComponent implements OnChanges{
       this._ratioCanvasY =  this.canvas.nativeElement.offsetHeight/img.height
       this._initDragboxes();
       this._dragboxesDatas = [...this._dragboxesDatasInit]
+      //create the form
       this._form = this._buildForm();
+      //set form values if this is in update mode
+      if(this._memeSelected.meme.title != ""){
+        this._form.patchValue({"title": this._memeSelected.meme.title, "description": this._memeSelected.meme.description})
+        this._isUpdateMode = true;
+      }
       //add inputs for every dragboxes
       this.dragboxesDatas.forEach((dragbox)=> this._addDragboxFormControl(dragbox.content))
 
@@ -170,7 +183,12 @@ export class FormMemeComponent implements OnChanges{
     this._dragboxesDatas.forEach((dragbox) => {
       resizedDragboxesDatas.push({left: dragbox.left/this._ratioCanvasX, top: dragbox.top/this._ratioCanvasY, rot:dragbox.rot, width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, content: dragbox.content})
     })
-    this._submit$.emit({meme:{id_blank: this._memeSelected.meme.id,title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement});
+    if(this.isUpdateMode){
+      this._submit$.emit({meme:{id: this._memeSelected.meme.id, title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement})
+    }
+    else{
+      this._submit$.emit({meme:{id_blank: this._memeSelected.meme.id,title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement});
+    }
   }
 
   /**

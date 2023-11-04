@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Delete, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Delete, Param, Post, UseInterceptors, Put } from '@nestjs/common';
 import { Observable, filter, map, of } from 'rxjs';
 import { HttpInterceptor } from 'src/interceptors/http.interceptor';
 import { MemesService } from './memes.service';
@@ -16,6 +16,7 @@ import {
     ApiUnprocessableEntityResponse,
   } from '@nestjs/swagger';import { HandlerParams } from './validators/handler-params';
 import { FileService } from 'src/files/files.service';
+import { UpdateMemeDTO } from './dto/update-meme.dto';
 
 @ApiTags('memes')
 @Controller('memes')
@@ -114,6 +115,43 @@ export class MemesController {
     create(@Body() createMemeDTO: CreateMemeDTO): Observable<MemeEntity> {
         return this._memesService.create(createMemeDTO);
     }
+
+      /**
+   * Handler to answer to PUT /memes/:id route
+   *
+   * @param {HandlerParams} params list of route params to take meme id
+   * @param updateMemeDto data to update
+   *
+   * @returns Observable<MemeEntity>
+   */
+  @ApiOkResponse({
+    description: 'The meme has been successfully updated',
+    type: MemeEntity,
+  })
+  @ApiNotFoundResponse({
+    description: 'meme with the given "id" doesn\'t exist in the database',
+  })
+  @ApiUnprocessableEntityResponse({
+    description: "The request can't be performed in the database",
+  })
+  @ApiBadRequestResponse({
+    description: 'Parameter and/or payload provided are not good',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Unique identifier of the meme in the database',
+    type: String,
+    allowEmptyValue: false,
+  })
+  @ApiBody({ description: 'Payload to update a meme', type: UpdateMemeDTO })
+  @Put(':id')
+  update(
+    @Param() params: HandlerParams,
+    @Body() updateMemeDto: UpdateMemeDTO,
+  ): Observable<MemeEntity> {
+    return this._memesService.update(params.id, updateMemeDto);
+  }
+
 
     /**
      * Handler to answer to DELETE /memes/:id route

@@ -4,6 +4,7 @@ import { Observable, catchError, defaultIfEmpty, filter, from, map, mergeMap, of
 import { CreateMemeDTO } from './dto/create-meme.dto';
 import { MemeEntity } from './entities/meme.entity';
 import { MemesDao } from './dao/memes.dao';
+import { UpdateMemeDTO } from './dto/update-meme.dto';
 
 @Injectable()
 export class MemesService {
@@ -73,6 +74,30 @@ export class MemesService {
             ),
             map((memeCreated) => new MemeEntity(memeCreated)),
         );
+
+    /**
+     * Update a meme in memes list
+     *
+     * @param {string} id of the meme to update
+     * @param meme data to update
+     *
+     * @returns {Observable<PersonEntity>}
+     */
+    update = (id: string, meme: UpdateMemeDTO): Observable<MemeEntity> =>
+        this._memesDao.findByIdAndUpdate(id, meme).pipe(
+        catchError(
+            (e) => throwError(() => new UnprocessableEntityException(e.message)),
+        ),
+        mergeMap((memeUpdated) =>
+            !!memeUpdated
+            ? of(new MemeEntity(memeUpdated))
+            : throwError(
+                () => new NotFoundException(`Meme with id '${id}' not found`),
+                ),
+        ),
+        );
+
+    
     /**
      * Deletes one meme in meme custom list
      *

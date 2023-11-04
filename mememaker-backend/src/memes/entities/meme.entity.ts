@@ -2,7 +2,6 @@ import { Exclude, Expose, Type } from "class-transformer";
 import { MemeDragboxDatasEntity } from "./meme-dragbox-datas.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Meme } from "../schemas/meme.schema";
-import { DragboxDatas } from "../memes.types";
 
 
 @Exclude()

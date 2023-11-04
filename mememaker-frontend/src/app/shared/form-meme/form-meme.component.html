@@ -1,4 +1,5 @@
-<h2 mat-dialog-title >Create a new meme</h2>
+<h2 mat-dialog-title *ngIf="!isUpdateMode" >Create a new meme</h2>
+<h2 mat-dialog-title *ngIf="isUpdateMode" >Update {{form.get('title')!.value}}</h2>
 
 <mat-dialog-content>
     <form novalidate [formGroup]="form">

@@ -7,7 +7,7 @@ import { MemesService } from '../shared/services/memes.service';
 import { DialogSelectTemplateComponent } from '../shared/dialog-select-template/dialog-select-template.component';
 import { Observable, Subject, filter, map, mergeMap, of, pluck } from 'rxjs';
 import { MemeSelected } from '../shared/types/meme-selected.type';
-import { MemeToCreate } from '../shared/types/meme-to-create.type';
+import { MemeToProcess } from '../shared/types/meme-to-process.type';
 
 @Component({
   selector: 'app-memes',
@@ -17,7 +17,7 @@ import { MemeToCreate } from '../shared/types/meme-to-create.type';
 export class MemesComponent implements OnInit {
   private _memes: Meme[];
   private _selectTemplateDialog: MatDialogRef<DialogSelectTemplateComponent, MemeSelected> | undefined;
-  private _memeDialog: MatDialogRef<DialogMemeComponent, MemeToCreate> | undefined;
+  private _memeDialog: MatDialogRef<DialogMemeComponent, MemeToProcess> | undefined;
 
   private _dialogStatus: string;
 
@@ -58,7 +58,6 @@ export class MemesComponent implements OnInit {
     }
 
     showDialog(): void {
-      console.log(this._memes)
 
       // set dialog status
       this._dialogStatus = 'active';
@@ -89,8 +88,8 @@ export class MemesComponent implements OnInit {
             this._memeDialog
                 .afterClosed()
                 .pipe(
-                  filter((memeToCreate: MemeToCreate | undefined) => !!memeToCreate),
-                  mergeMap((memeToCreate: MemeToCreate | undefined) => (this._add(memeToCreate as MemeToCreate)))                  
+                  filter((memeToProcess: MemeToProcess | undefined) => !!memeToProcess),
+                  mergeMap((memeToProcess: MemeToProcess | undefined) => (this._add(memeToProcess as MemeToProcess)))                  
                 )
                 .subscribe({
                   error: () => (this._dialogStatus = 'inactive'),
@@ -102,10 +101,10 @@ export class MemesComponent implements OnInit {
         });
     }
 
-    private _add(memeToCreate: MemeToCreate): Observable<void>{
-      return this._memesService.create(memeToCreate.meme).pipe(
+    private _add(memeToProcess: MemeToProcess): Observable<void>{
+      return this._memesService.create(memeToProcess.meme).pipe(
         map((meme: Meme) =>{
-          memeToCreate.canvas.toBlob((blob) => {
+          memeToProcess.canvas.toBlob((blob) => {
             this._memesService.upload(meme.id!, blob!)
                               .subscribe((res) => {this._memes.push({...meme, path:res.path}); this._changeDetectorRef.detectChanges()})
           })

@@ -60,7 +60,6 @@ export class DragboxComponent{
 
     let width = Math.sqrt(Math.pow(rect.pos1[0] - rect.pos2[0], 2) + Math.pow(rect.pos1[1] - rect.pos2[1], 2))
     let height = Math.sqrt(Math.pow(rect.pos1[0] - rect.pos3[0], 2) + Math.pow(rect.pos1[1] - rect.pos3[1], 2))
-    console.log(this._dragboxData)
     this.update$.emit({...this._dragboxData, left: rect.pos1[0], top: rect.pos1[1], rot: rect.rotation, width: width, height: height });
   }
 }
