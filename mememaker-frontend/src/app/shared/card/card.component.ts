@@ -11,6 +11,8 @@ import { MemesService } from '../services/memes.service';
 export class CardComponent {
 
   @ViewChild("img") image!: ElementRef<HTMLImageElement>;
+  @ViewChild("downloadButton") downloadButton!: ElementRef<HTMLLinkElement>;
+
   private readonly _delete$: EventEmitter<Meme>;
 
   private _meme : Meme
@@ -43,8 +45,10 @@ export class CardComponent {
     this._memesService.fetchCanva(this.meme.path!)
     .subscribe({
       next: (res: Blob) => {
-        this.image.nativeElement.src = URL.createObjectURL(res).toString();
+        const url = URL.createObjectURL(res).toString()
+        this.image.nativeElement.src = url;
         this.image.nativeElement.alt = this.meme.title;
+        this.downloadButton.nativeElement.href = url;
       }
     })
   }

@@ -19,6 +19,11 @@
     </p>
   </mat-card-content>
   <mat-card-actions align="end">
+    <button mat-button title="Download">
+      <a #downloadButton target="_self" download>
+        <mat-icon svgIcon="icon-download"></mat-icon>
+      </a>
+    </button>
     <button mat-button title="Edit" [routerLink]="['/edit', meme.id]">
       <mat-icon svgIcon="icon-edit"></mat-icon>
     </button>
