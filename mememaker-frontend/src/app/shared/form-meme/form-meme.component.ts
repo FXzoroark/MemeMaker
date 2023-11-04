@@ -110,7 +110,7 @@ export class FormMemeComponent implements OnChanges{
       //create the form
       this._form = this._buildForm();
       //set form values if this is in update mode
-      if(this._memeSelected.meme.title != ""){
+      if(this._memeSelected.meme.id_blank){ //if id_blank => update
         this._form.patchValue({"title": this._memeSelected.meme.title, "description": this._memeSelected.meme.description})
         this._isUpdateMode = true;
       }

@@ -53,7 +53,7 @@ export class MemesComponent implements OnInit {
           .delete(meme.id!)
           .subscribe(
             (id:string) =>
-              (this._memes = this._memes.filter((meme: Meme) => meme.id != id))
+              {this._memes = this._memes.filter((meme: Meme) => meme.id != id);this._changeDetectorRef.detectChanges()}
           )
     }
 

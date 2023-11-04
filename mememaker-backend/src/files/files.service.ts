@@ -12,5 +12,6 @@ export class FileService{
      * @return {Observable<void>}
      */
     delete = (path: string): void =>
-    fs.unlinkSync(`./upload${path}`);
+        fs.unlinkSync(`./upload${path}`);
+
 }
