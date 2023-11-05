@@ -29,6 +29,7 @@ export class MemesComponent implements OnInit {
   ) {
     this._memes = [];
     this._dialogStatus = 'inactive';
+    this._changeDetectorRef.markForCheck
   }
 
     /**
@@ -53,7 +54,7 @@ export class MemesComponent implements OnInit {
           .delete(meme.id!)
           .subscribe(
             (id:string) =>
-              {this._memes = this._memes.filter((meme: Meme) => meme.id != id);this._changeDetectorRef.detectChanges()}
+              {this._memes = this._memes.filter((meme: Meme) => meme.id != id); this._changeDetectorRef.detectChanges()}
           )
     }
 

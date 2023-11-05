@@ -62,12 +62,13 @@ export class UpdateComponent implements OnInit{
   _update(memeToProcess: MemeToProcess){
     const id = memeToProcess?.meme.id;
     delete memeToProcess?.meme.id;
-    this._memesService.update(id!, memeToProcess.meme).pipe(
+    return this._memesService.update(id!, memeToProcess.meme).pipe(
       map((meme: Meme) => 
         memeToProcess.canvas.toBlob((blob) =>
           this._memesService.upload(meme.id!, blob!).subscribe({
-            complete: () => this._router.navigate(["/memes"]),
+            complete: () => this._router.navigate(["/memes"])
           })
+
         )
       )
     ).subscribe()

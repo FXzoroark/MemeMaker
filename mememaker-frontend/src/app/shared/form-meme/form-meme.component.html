@@ -10,7 +10,7 @@
                         <mat-card>
                             <canvas #canvas>
                             </canvas> 
-                            <app-dragbox [dragboxData] = "dragboxDatas" (updateDragboxData) = "updateDragboxData($event)" *ngFor="let dragboxDatas of dragboxesDatasInit; let i = index"></app-dragbox>
+                            <app-dragbox [dragboxData] = "dragboxDatas" (updateDragboxData) = "updateDragboxData($event)" *ngFor="let dragboxDatas of dragboxesDatasInit"></app-dragbox>
                         </mat-card>
                     </div> 
                 </td>
@@ -34,18 +34,30 @@
                             Description is <strong>255 chars max</strong>
                         </mat-error>
                     </mat-form-field>
-                    <ng-container formArrayName="dragboxInputs">
+                    <ng-container formArrayName="dragboxInputs" [class.mgb15]="form.get('dragboxInputs')?.invalid">
                         <ng-container  *ngFor="let dragboxInput of dragboxInputs.controls; let i = index" class="full-width" >
                             <div [formGroupName]="i">
-                                <mat-form-field [class.mgb15]="dragboxInput?.dirty && dragboxInput?.invalid">
-                                    <input matInput placeholder="DragBox {{i}}" formControlName="content" required (input)="change($event,i)" />
-                                    <mat-error *ngIf="dragboxInput?.dirty && dragboxInput?.hasError('required')">
+                                <mat-form-field [class.mgb15]="dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.invalid">
+                                    <input matInput placeholder="DragBox {{i}}" formControlName="content" required name="{{i}}" (input)="change($event,i)" />
+                                    <mat-error *ngIf="dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.hasError('required')">
                                         Dragbox content is <strong>required</strong>
                                     </mat-error>
                                 </mat-form-field>
+                                <button mat-button title="Delete" (click)="deleteDragbox(i)">
+                                    <mat-icon svgIcon="icon-delete"></mat-icon>
+                                </button>
                             </div>
                         </ng-container>
+                        <mat-error *ngIf="form.get('dragboxInputs')?.hasError('required')">
+                            At least <strong>1 DragboxInput</strong> needed
+                        </mat-error>
+                        <mat-error *ngIf="form.get('dragboxInputs')?.hasError('maxlength')">
+                            less than <strong>10 DragboxInput</strong> needed
+                        </mat-error>
                     </ng-container>
+                    <button mat-button type="button" (click)="addDragbox()" color="accent"  >
+                        <i class="material-icons">add</i>
+                    </button>
                 </td>
             </tr>
         </table>

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import { Canvas, createCanvas, loadImage } from 'canvas';
 import { DragboxData } from '../types/dragboxData.type';
 import { Meme } from '../types/meme.type';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
 import { MemeSelected } from '../types/meme-selected.type';
 import { DomSanitizer } from '@angular/platform-browser';
 import { text } from 'stream/consumers';
@@ -172,6 +172,7 @@ export class FormMemeComponent implements OnChanges{
   change(event: any, i: number): void{
     this._dragboxesDatas[i].content = event.target.value;
     this.updateCanvas()
+    
   }
 
   cancel(): void{
@@ -183,12 +184,28 @@ export class FormMemeComponent implements OnChanges{
     this._dragboxesDatas.forEach((dragbox) => {
       resizedDragboxesDatas.push({left: dragbox.left/this._ratioCanvasX, top: dragbox.top/this._ratioCanvasY, rot:dragbox.rot, width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, content: dragbox.content})
     })
+    console.log(resizedDragboxesDatas)
     if(this.isUpdateMode){
       this._submit$.emit({meme:{id: this._memeSelected.meme.id, title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement})
     }
     else{
       this._submit$.emit({meme:{id_blank: this._memeSelected.meme.id,title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement});
     }
+  }
+
+  addDragbox(): void{
+    let newDragbox = {id: Date.now().toString(), left: 100*this._ratioCanvasX, top: 100*this._ratioCanvasY, rot:0, width: 100*this._ratioCanvasX, height: 100*this._ratioCanvasY, content:""}
+    this._dragboxesDatas.push(newDragbox)
+    this._dragboxesDatasInit = this.dragboxesDatas;
+    this._addDragboxFormControl(newDragbox.content)
+  }
+
+  deleteDragbox(index: number): void{
+    const id = this._dragboxesDatas[index].id;
+    this._dragboxesDatas = this._dragboxesDatas.filter((dragbox) => dragbox.id != id)
+    this._dragboxesDatasInit = this._dragboxesDatas;
+    this._deleteDragboxFormControl(index);
+    this.updateCanvas()
   }
 
   /**
@@ -204,14 +221,21 @@ export class FormMemeComponent implements OnChanges{
         '',
         Validators.compose([Validators.maxLength(255)])
       ),
-      dragboxInputs: new FormArray([])
+      dragboxInputs: new FormArray(
+        [],
+        Validators.compose([Validators.required, Validators.maxLength(10)])
+        )
     });
   }
 
-  private _addDragboxFormControl(content: string): void{
+  private _addDragboxFormControl(content: string): void {
     this.dragboxInputs.push(this._fb.group({
       content: [content, Validators.compose([Validators.required])]
     }));
+  }
+
+  private _deleteDragboxFormControl(index: number): void {
+    (<FormArray>this._form.get("dragboxInputs")).removeAt(index);
   }
 
 }
