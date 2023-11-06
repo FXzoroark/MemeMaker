@@ -5,6 +5,7 @@ import { User } from '../shared/types/user.type';
 import { AuthService } from '../shared/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogLoginComponent } from '../shared/dialog-login/dialog-login.component';
+import { DialogSigninComponent } from '../shared/dialog-signin/dialog-signin.component';
 
 @Component({
   selector: 'app-header',
@@ -14,8 +15,14 @@ export class HeaderComponent {
 
   constructor(private router: Router, public dialog: MatDialog) {}
 
-  onSignIn() {
-    
+  openSigninDialog() {
+    const dialogRef = this.dialog.open(DialogSigninComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+
+    });
   }
 
   openLoginDialog() {

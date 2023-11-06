@@ -28,6 +28,8 @@ import { CardComponent } from './shared/card/card.component';
 import { AuthService } from './shared/services/auth.service';
 import { DialogLoginComponent } from './shared/dialog-login/dialog-login.component';
 import { FormLoginComponent } from './shared/form-login/form-login.component';
+import { DialogSigninComponent } from './shared/dialog-signin/dialog-signin.component';
+import { FormSigninComponent } from './shared/form-signin/form-signin.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { FormLoginComponent } from './shared/form-login/form-login.component';
     FormSelectTemplateComponent,
     CardComponent,
     DialogLoginComponent,
-    FormLoginComponent
+    FormLoginComponent,
+    DialogSigninComponent,
+    FormSigninComponent
   ],
   imports: [
     BrowserModule,
