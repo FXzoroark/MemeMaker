@@ -9,15 +9,17 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./dialog-login.component.css']
 })
 export class DialogLoginComponent {
-  user: User = { username: '', password: '' };
 
   constructor(
-    private dialogRef: MatDialogRef<DialogLoginComponent, User>,
-    private authService: AuthService
+    private _dialogRef: MatDialogRef<DialogLoginComponent, User>,
+    private _authService: AuthService
   ) {}
 
-  onLogIn() {
-    // Traitement de la connexion ici
-    this.dialogRef.close(); // Ferme la fenêtre de dialogue
+  onCancel(): void{
+    this._dialogRef.close();
+  }
+
+  onLogIn(user: User) {
+    this._dialogRef.close(user); 
   }
 }
