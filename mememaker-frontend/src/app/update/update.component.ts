@@ -56,9 +56,7 @@ export class UpdateComponent implements OnInit{
           filter((memeToProcess: MemeToProcess| undefined) => !!memeToProcess),
           map((memeToProcess: MemeToProcess | undefined) => (this._update(memeToProcess as MemeToProcess)))                  
           )
-          .subscribe({
-            complete: () => this._router.navigate(["/memes"])
-          })
+          .subscribe()
   }
 
   _update(memeToProcess: MemeToProcess){
