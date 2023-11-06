@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Meme } from './memes.types';
 import { Observable, catchError, defaultIfEmpty, filter, from, map, mergeMap, of, tap, throwError } from 'rxjs';
-import { CreateMemeDTO } from './dto/create-meme.dto';
+import { CreateCustomMemeDTO } from './dto/create-custom-meme.dto';
 import { MemeEntity } from './entities/meme.entity';
 import { MemesDao } from './dao/memes.dao';
 import { UpdateMemeDTO } from './dto/update-meme.dto';
+import { CreateBlankMemeDTO } from './dto/create-blank-meme.dto';
 
 @Injectable()
 export class MemesService {
@@ -67,7 +68,7 @@ export class MemesService {
      * 
      * @returns {Observable<MemeEntity>}
      */
-    create = (meme: CreateMemeDTO): Observable<MemeEntity> =>
+    create = (meme: CreateCustomMemeDTO | CreateBlankMemeDTO): Observable<MemeEntity> =>
         this._memesDao.save(meme).pipe(
             catchError(
                 (e) => throwError(() => new UnprocessableEntityException(e.message)),

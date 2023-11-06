@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import { Canvas, createCanvas, loadImage } from 'canvas';
 import { DragboxData } from '../types/dragboxData.type';
 import { Meme } from '../types/meme.type';
-import { FormArray, FormBuilder, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, MinLengthValidator, ValidatorFn, Validators } from '@angular/forms';
 import { MemeSelected } from '../types/meme-selected.type';
 import { DomSanitizer } from '@angular/platform-browser';
 import { text } from 'stream/consumers';
@@ -31,9 +31,11 @@ export class FormMemeComponent implements OnChanges{
   private readonly _cancel$: EventEmitter<void>;
   private readonly _submit$: EventEmitter<MemeToProcess>;
 
+  private _validatorDragboxFn: ValidatorFn | null;
   private _form: FormGroup;
 
   private _isUpdateMode: boolean;
+  private _isCreateTemplate: boolean;
 
 
   constructor(private _fb: FormBuilder){
@@ -46,6 +48,8 @@ export class FormMemeComponent implements OnChanges{
     this._fontSize = 40;
     this._fontHeight = this._fontSize*1.286;
     this._isUpdateMode = false;
+    this._isCreateTemplate = false;
+    this._validatorDragboxFn = null;
   }
 
   @Input()
@@ -74,6 +78,7 @@ export class FormMemeComponent implements OnChanges{
   get form(): FormGroup {
     return this._form;
   }
+  
 
   get dragboxInputs(){
     return this._form.controls["dragboxInputs"] as FormArray;
@@ -81,6 +86,10 @@ export class FormMemeComponent implements OnChanges{
 
   get isUpdateMode(): boolean {
     return this._isUpdateMode;
+  }
+
+  get isCreateTemplate(){
+    return this._isCreateTemplate;
   }
   
   ngOnChanges(): void {
@@ -114,6 +123,12 @@ export class FormMemeComponent implements OnChanges{
         this._form.patchValue({"title": this._memeSelected.meme.title, "description": this._memeSelected.meme.description})
         this._isUpdateMode = true;
       }
+      if(!this._memeSelected.meme.path){ // if path == null => create template
+        this._form.patchValue({"title": this._memeSelected.meme.title});
+        this._isCreateTemplate = true;
+      }
+      //dragbox need to be empty if we want to create a template
+      this._validatorDragboxFn = this._isCreateTemplate ? Validators.compose([Validators.maxLength(0)]) : Validators.compose([Validators.required]) 
       //add inputs for every dragboxes
       this.dragboxesDatas.forEach((dragbox)=> this._addDragboxFormControl(dragbox.content))
 
@@ -184,9 +199,11 @@ export class FormMemeComponent implements OnChanges{
     this._dragboxesDatas.forEach((dragbox) => {
       resizedDragboxesDatas.push({left: dragbox.left/this._ratioCanvasX, top: dragbox.top/this._ratioCanvasY, rot:dragbox.rot, width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, content: dragbox.content})
     })
-    console.log(resizedDragboxesDatas)
-    if(this.isUpdateMode){
+    if(this._isUpdateMode){
       this._submit$.emit({meme:{id: this._memeSelected.meme.id, title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement})
+    }
+    else if(this._isCreateTemplate){
+      this._submit$.emit({meme: {title: formDatas.title, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement})
     }
     else{
       this._submit$.emit({meme:{id_blank: this._memeSelected.meme.id,title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement});
@@ -223,14 +240,14 @@ export class FormMemeComponent implements OnChanges{
       ),
       dragboxInputs: new FormArray(
         [],
-        Validators.compose([Validators.required, Validators.maxLength(10)])
+        Validators.compose([Validators.minLength(1), Validators.maxLength(10)])
         )
     });
   }
 
   private _addDragboxFormControl(content: string): void {
     this.dragboxInputs.push(this._fb.group({
-      content: [content, Validators.compose([Validators.required])]
+      content: [{value: content, disabled:this._isCreateTemplate}, this._validatorDragboxFn]
     }));
   }
 

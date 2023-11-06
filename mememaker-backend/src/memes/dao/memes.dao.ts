@@ -3,8 +3,9 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Meme } from "../schemas/meme.schema";
 import { Model } from "mongoose";
 import { Observable, from, map, of, tap, throwIfEmpty, timestamp } from "rxjs";
-import { CreateMemeDTO } from "../dto/create-meme.dto";
+import { CreateCustomMemeDTO } from "../dto/create-custom-meme.dto";
 import { UpdateMemeDTO } from "../dto/update-meme.dto";
+import { CreateBlankMemeDTO } from "../dto/create-blank-meme.dto";
 
 
 @Injectable()
@@ -38,11 +39,11 @@ export class MemesDao{
   /**
    * add meme it in memes list
    *
-   * @param {CreateMemeDTO} meme to create
+   * @param {CreateCustomMemeDTO | CreateBlankMemeDTO} meme to create
    *
    * @return {Observable<Meme>}
    */
-   save = (meme: CreateMemeDTO): Observable<Meme> =>
+   save = (meme: CreateCustomMemeDTO | CreateBlankMemeDTO): Observable<Meme> =>
     from(new this._memeModel({...meme, creationDate: Date.now(), updateDate: Date.now()}).save());
 
   /**

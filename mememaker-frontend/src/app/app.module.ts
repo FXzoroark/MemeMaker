@@ -26,6 +26,9 @@ import { FormMemeComponent } from './shared/form-meme/form-meme.component';
 import { FormSelectTemplateComponent } from './shared/form-select-template/form-select-template.component';
 import { CardComponent } from './shared/card/card.component';
 import { UpdateComponent } from './update/update.component';
+import { FormUploadTemplateComponent } from './shared/form-upload-template/form-upload-template.component';
+import { FileDragAndDropDirective } from './shared/directives/file-drag-and-drop.directive';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import { UpdateComponent } from './update/update.component';
     FormMemeComponent,
     FormSelectTemplateComponent,
     CardComponent,
-    UpdateComponent
+    UpdateComponent,
+    FormUploadTemplateComponent,
+    FileDragAndDropDirective
   ],
   imports: [
     BrowserModule,
@@ -54,6 +59,7 @@ import { UpdateComponent } from './update/update.component';
     MatSelectModule,
     MatFormFieldModule,
     NgxMoveableModule,
+    NgxMatFileInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

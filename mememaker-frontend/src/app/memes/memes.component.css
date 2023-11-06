@@ -6,14 +6,18 @@ section {
 }
 
 .buttons-fab {
+  text-align: center;
   display: block;
   height: 90px;
   width: 90px;
   position: fixed;
   bottom: 0;
   right: 0;
+  padding: 15px;
 }
 
 .buttons-fab button {
+  margin-bottom: 10px;
   transition: bottom 0.2s;
 }
+

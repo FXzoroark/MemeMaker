@@ -2,7 +2,8 @@
   <app-card [meme]="meme" (deleteMeme)="delete($event)" *ngFor="let meme of memes"></app-card>
 </section>
 <section class="buttons-fab" *ngIf="dialogStatus === 'inactive'">
-    <button (click)="showDialog()" mat-fab color="accent" class="button-add">
+    <button (click)="showDialog(false)" mat-fab color="accent" class="button-add">
       <i class="material-icons">add</i>
     </button>
+    <button (click)="showDialog(true)" color="primary">Create Template</button>  
 </section>

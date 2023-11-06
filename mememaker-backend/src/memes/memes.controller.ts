@@ -2,7 +2,7 @@ import { Body, ClassSerializerInterceptor, Controller, Get, Delete, Param, Post,
 import { Observable, filter, map, of } from 'rxjs';
 import { HttpInterceptor } from 'src/interceptors/http.interceptor';
 import { MemesService } from './memes.service';
-import { CreateMemeDTO } from './dto/create-meme.dto';
+import { CreateCustomMemeDTO } from './dto/create-custom-meme.dto';
 import { MemeEntity } from './entities/meme.entity';
 import {
     ApiBadRequestResponse,
@@ -17,6 +17,7 @@ import {
   } from '@nestjs/swagger';import { HandlerParams } from './validators/handler-params';
 import { FileService } from 'src/files/files.service';
 import { UpdateMemeDTO } from './dto/update-meme.dto';
+import { CreateBlankMemeDTO } from './dto/create-blank-meme.dto';
 
 @ApiTags('memes')
 @Controller('memes')
@@ -96,7 +97,7 @@ export class MemesController {
     /**
      * Handler to answer to POST /memes route
      * 
-     * @param createMemeDTO data to crate
+     * @param createMemeDTO data to create
      * 
      * @returns Observable<Meme>
      */
@@ -109,10 +110,10 @@ export class MemesController {
     })
     @ApiBody({
         description: 'Payload to create a new meme',
-        type: CreateMemeDTO,
+        type: CreateCustomMemeDTO,
     })
     @Post()
-    create(@Body() createMemeDTO: CreateMemeDTO): Observable<MemeEntity> {
+    create(@Body() createMemeDTO: CreateCustomMemeDTO | CreateBlankMemeDTO): Observable<MemeEntity> {
         return this._memesService.create(createMemeDTO);
     }
 

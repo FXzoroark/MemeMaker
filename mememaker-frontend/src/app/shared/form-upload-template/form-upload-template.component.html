@@ -1,0 +1,29 @@
+
+<mat-dialog-content>
+    <form novalidate [formGroup]="form">
+        <mat-form-field class="full-width" [class.mgb15]="form.get('imageInput')?.dirty && form.get('imageInput')?.invalid">
+            <div class="dropzone" appFileDragAndDrop (filesChangeEmiter)="onFileDropped($event)">
+                <div class="text-wrapper">
+                    <div class="centered">
+                        <ngx-mat-file-input formControlName="imageInput" name="file" id="file"></ngx-mat-file-input>
+                        <label for="file"> or Drop it here!</label>
+                    </div>
+                </div>
+            </div>
+            <mat-error *ngIf="form.get('imageInput')?.dirty && form.get('imageInput')?.hasError('required')">
+                Image file is required.
+            </mat-error>
+            <mat-error *ngIf="form.get('imageInput')?.dirty && form.get('imageInput')?.hasError('errorType')">
+                {{form.get('imageInput')?.getError('errorType')}}
+            </mat-error>
+            <mat-error *ngIf="form.get('imageInput')?.dirty && form.get('imageInput')?.hasError('errorSize')">
+                {{form.get('imageInput')?.getError('errorSize')}}
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-button color="primary" type="submit" (click)="submit(form.value.imageInput)" [disabled]="form.invalid">Save</button>
+</mat-dialog-actions>

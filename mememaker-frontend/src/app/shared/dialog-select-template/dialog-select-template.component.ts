@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MemeSelected } from '../types/meme-selected.type';
 
 @Component({
@@ -12,8 +12,12 @@ export class DialogSelectTemplateComponent{
 
   constructor(
     private _dialogRef: MatDialogRef<DialogSelectTemplateComponent, MemeSelected>,
+    @Inject(MAT_DIALOG_DATA) private _isCreateTemplate: boolean
     ){}
-
+  
+  get isCreateTemplate(){
+    return this._isCreateTemplate;
+  }
   onCancel(): void{
     this._dialogRef.close();
   }

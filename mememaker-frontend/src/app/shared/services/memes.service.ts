@@ -77,9 +77,10 @@ export class MemesService {
                .pipe(map(() => memeId))
   }
 
-  upload(memeId: string, blob: Blob): Observable<any>{
+  upload(memeId: string, blob: Blob, isTemplate: boolean): Observable<any>{
     let fd = new FormData();
     fd.append('id', memeId);
+    fd.append('isTemplate', isTemplate.toString());
     fd.append('canva', new File([blob], memeId+".jpg"));
     return this._http.post(
       this._backendURL.uploadMeme,

@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsMongoId, IsNotEmpty } from "class-validator";
+import { IsBoolean, IsBooleanString, IsMongoId, IsNotEmpty } from "class-validator";
 
 // you can add validate using class-validator
 export class SingleFileDto{
     @ApiProperty({type:"string",format:"binary"})
-    canva:string
+    canva: string
 
     @ApiProperty({
         description: 'Unique identifier of the meme in the database',
@@ -12,5 +12,13 @@ export class SingleFileDto{
     })
     @IsMongoId()
     @IsNotEmpty()
-    id:string
+    id: string
+
+    @ApiProperty({
+        description: 'define if it is an template or not',
+        example: true
+    })
+    @IsBooleanString()
+    @IsNotEmpty()
+    isTemplate: string
 }

@@ -2,7 +2,6 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular
 import { MemesService } from '../services/memes.service';
 import { Meme } from '../types/meme.type';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { MemeSelected } from '../types/meme-selected.type';
 
 @Component({
@@ -17,7 +16,6 @@ export class FormSelectTemplateComponent implements AfterViewInit {
   private readonly _cancel$: EventEmitter<void>;
   private readonly _submit$: EventEmitter<MemeSelected>;
   private readonly _form: FormGroup;
-  private readonly _environment;
 
   constructor(
     private _memesService: MemesService,
@@ -27,7 +25,6 @@ export class FormSelectTemplateComponent implements AfterViewInit {
     this._submit$ = new EventEmitter<MemeSelected>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
-    this._environment = environment;
   }
 
   get blanksMemes(): Meme[]{
@@ -40,10 +37,6 @@ export class FormSelectTemplateComponent implements AfterViewInit {
   
   get form(): FormGroup{
     return this._form;
-  }
-
-  get environment(): any{
-    return this._environment;
   }
 
   @Output('cancel')

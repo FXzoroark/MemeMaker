@@ -1,0 +1,22 @@
+.full-width {
+    width: 100%;
+  }
+
+.text-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+.centered {
+    font-family: sans-serif;
+    font-size: 1.3em;
+    text-align:center;
+}
+
+.dropzone {
+    height: 200px;
+    display: table;
+    width: 100%;
+    background-color: #eee;
+    border: dotted 1px #aaa;
+}

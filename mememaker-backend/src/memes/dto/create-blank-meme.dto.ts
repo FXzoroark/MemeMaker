@@ -3,29 +3,14 @@ import { Type } from "class-transformer";
 import { MemeDragboxDatasDTO } from "./meme-dragbox-datas.dto";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-export class CreateMemeDTO {
-    @ApiProperty({
-        description: 'Unique identifier of the blank meme in the database',
-        example: '5763cd4dc378a38ecd387737'
-    })
-    @IsMongoId()
-    @IsNotEmpty()
-    id_blank: string;
+export class CreateBlankMemeDTO {
 
     @ApiProperty({
-        example: 'Two buttons customized by me'
+        example: 'Two buttons'
     })
     @IsString()
     @Length(2, 64)
     title: string;
-
-    @ApiPropertyOptional({
-        example: 'This is my version of the two buttons meme. I hope you enjoy it'
-    })
-    @IsOptional()
-    @IsString()
-    @MaxLength(255)
-    description?: string;
 
     @ApiProperty()
     @IsArray()

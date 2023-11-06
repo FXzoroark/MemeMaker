@@ -29,16 +29,17 @@ export class FilesController {
     @UseInterceptors(
       FastifyFileInterceptor('canva', {
         storage: diskStorage({
-          destination: './upload/custom',
+          destination: './upload',
           filename: editFileName,
         }),
         fileFilter: imageFileFilter,
       }),
     )
     upload(@Req() req: Request, @UploadedFile() file: Express.Multer.File, @Body() body: SingleFileDto,) {
-        let file_path = `/custom/${body.id}${extname(file.originalname)}`;
-        fs.rename(`./upload/custom/${file.originalname.split('.')[0]}${extname(file.originalname)}`, `./upload${file_path}`, () => {})
-        this._memesService.updatePath(body.id, file_path).subscribe();
-        return { ...body, path: file_path };
+      const typePath = body.isTemplate === "true" ? "/blank/" : "/custom/";
+      let file_path = `${typePath}${body.id}${extname(file.originalname)}`;
+      fs.rename(`./upload/${file.originalname.split('.')[0]}${extname(file.originalname)}`, `./upload${file_path}`, () => {})
+      this._memesService.updatePath(body.id, file_path).subscribe();
+      return { ...body, path: file_path };
     }
 }

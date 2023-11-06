@@ -1,4 +1,4 @@
-<h2 mat-dialog-title *ngIf="!isUpdateMode" >Create a new meme</h2>
+<h2 mat-dialog-title *ngIf="!isUpdateMode" >{{ isCreateTemplate ? "Create a new Template" : "Create a new meme"}}</h2>
 <h2 mat-dialog-title *ngIf="isUpdateMode" >Update {{form.get('title')!.value}}</h2>
 
 <mat-dialog-content>
@@ -28,7 +28,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field class="full-width" [class.mgb15]="form.get('description')?.dirty && form.get('description')?.invalid">
+                    <mat-form-field *ngIf="!isCreateTemplate" class="full-width" [class.mgb15]="form.get('description')?.dirty && form.get('description')?.invalid">
                         <input matInput placeholder="Description" formControlName="description" name="description" />
                         <mat-error *ngIf="form.get('description')?.dirty && form.get('description')?.hasError('maxlength')">
                             Description is <strong>255 chars max</strong>
@@ -38,8 +38,8 @@
                         <ng-container  *ngFor="let dragboxInput of dragboxInputs.controls; let i = index" class="full-width" >
                             <div [formGroupName]="i">
                                 <mat-form-field [class.mgb15]="dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.invalid">
-                                    <input matInput placeholder="DragBox {{i}}" formControlName="content" required name="{{i}}" (input)="change($event,i)" />
-                                    <mat-error *ngIf="dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.hasError('required')">
+                                    <input matInput placeholder="DragBox {{i}}" formControlName="content" name="{{i}}" (input)="change($event,i)" />
+                                    <mat-error *ngIf="!isCreateTemplate && dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.hasError('required')">
                                         Dragbox content is <strong>required</strong>
                                     </mat-error>
                                 </mat-form-field>
@@ -48,7 +48,7 @@
                                 </button>
                             </div>
                         </ng-container>
-                        <mat-error *ngIf="form.get('dragboxInputs')?.hasError('required')">
+                        <mat-error *ngIf="form.get('dragboxInputs')?.hasError('minlength')">
                             At least <strong>1 DragboxInput</strong> needed
                         </mat-error>
                         <mat-error *ngIf="form.get('dragboxInputs')?.hasError('maxlength')">

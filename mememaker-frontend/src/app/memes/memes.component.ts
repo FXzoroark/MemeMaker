@@ -58,15 +58,16 @@ export class MemesComponent implements OnInit {
           )
     }
 
-    showDialog(): void {
+    showDialog(isCreateTemplate: boolean): void {
 
       // set dialog status
       this._dialogStatus = 'active';
       
       // open select template modal
       this._selectTemplateDialog = this._dialog.open(DialogSelectTemplateComponent, {
-        width: '300px',
+        width: '400px',
         disableClose: true,
+        data:isCreateTemplate
       });
 
 
@@ -77,7 +78,7 @@ export class MemesComponent implements OnInit {
           filter((memeSelected: MemeSelected | undefined) => !!memeSelected)
         )
         .subscribe({
-          next: (memeSelected: MemeSelected | undefined) =>{
+          next: (memeSelected: MemeSelected | undefined) => {
 
             this._memeDialog = this._dialog.open(DialogMemeComponent, {
               position:{left: "20%"},
@@ -90,7 +91,7 @@ export class MemesComponent implements OnInit {
                 .afterClosed()
                 .pipe(
                   filter((memeToProcess: MemeToProcess | undefined) => !!memeToProcess),
-                  mergeMap((memeToProcess: MemeToProcess | undefined) => (this._add(memeToProcess as MemeToProcess)))                  
+                  mergeMap((memeToProcess: MemeToProcess | undefined) => (this._add(memeToProcess as MemeToProcess, isCreateTemplate)))                  
                 )
                 .subscribe({
                   error: () => (this._dialogStatus = 'inactive'),
@@ -102,12 +103,17 @@ export class MemesComponent implements OnInit {
         });
     }
 
-    private _add(memeToProcess: MemeToProcess): Observable<void>{
+    private _add(memeToProcess: MemeToProcess, isTemplate: boolean): Observable<void>{
       return this._memesService.create(memeToProcess.meme).pipe(
         map((meme: Meme) =>{
           memeToProcess.canvas.toBlob((blob) => {
-            this._memesService.upload(meme.id!, blob!)
-                              .subscribe((res) => {this._memes.push({...meme, path:res.path}); this._changeDetectorRef.detectChanges()})
+            this._memesService.upload(meme.id!, blob!, isTemplate)
+                              .subscribe((res) => {
+                                if(!isTemplate){
+                                  this._memes.push({...meme, path:res.path});
+                                  this._changeDetectorRef.detectChanges();
+                                }
+                              })
           })
         })
       )
