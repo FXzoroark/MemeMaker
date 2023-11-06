@@ -1,24 +1,37 @@
-// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { User } from '../types/user.type';
+import { environment } from 'src/environments/environment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  private readonly _backendURL: any;
 
-  signIn(user: User) {
-    // this.authService.signIn(user).subscribe((response) => {
-    //   // Traiter la réponse de l'authentification ici
-    // });
-    return this.http.post('/api/user/signin', user);
+  constructor(private _http: HttpClient) {
+    this._backendURL = {}
+    // build backend base url
+    let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
+    if (environment.backend.port) {
+      baseUrl += `:${environment.backend.port}`;
+    }
+
+    // build all backend urls
+    // @ts-ignore
+    Object.keys(environment.backend.endpoints).forEach(
+      (k) =>
+        // @ts-ignore
+        (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
+    );
   }
 
-  logIn(user: User) {
-    // this.authService.logIn(user).subscribe((response) => {
-    //   // Traiter la réponse de la connexion ici
-    // });
-    //console.log("Reached auth service");
-    return this.http.post('/api/user/login', user);
+  signIn(user: User): Observable<any> {
+    return this._http.post(`${this._backendURL.signup}`, user);
+  }
+
+  logIn(user: User): Observable<any> {
+    return this._http.post(`${this._backendURL.login}`, user);
   }
 }

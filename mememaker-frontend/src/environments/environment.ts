@@ -9,8 +9,9 @@ export const environment = {
             allBlanks: '/memes/blanks',
             blankCanvas: '/blank',
             allMemes: '/memes',
-            uploadMeme: '/files/upload'
-
+            uploadMeme: '/files/upload',
+            login: 'users/login',
+            signin: 'users/signin'
         }
     }
 };
