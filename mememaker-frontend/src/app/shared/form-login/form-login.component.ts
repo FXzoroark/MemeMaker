@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 import { User } from '../types/user.type';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-form-login',
@@ -8,49 +8,33 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./form-login.component.css']
 })
 export class FormLoginComponent {
-  private _user: User = { username: '', password: '' };
-  private readonly _cancel$: EventEmitter<void>;
-  private readonly _submit$: EventEmitter<User>;
-  private readonly _form: FormGroup; // Utilisez le modificateur d'accès public
-
-  constructor() {
-    this._submit$ = new EventEmitter<User>();
-    this._cancel$ = new EventEmitter<void>();
-    this._form = this._buildForm(); // Utilisez la propriété publique
-  }
-
-  get form(): FormGroup{
-    return this._form;
-  }
-
-  get user(): User{
-    return this._user;
-  }
+  userForm: FormGroup;
 
   @Output('cancel')
-  get cancel$(): EventEmitter<void> {
-    return this._cancel$;
-  }
+  cancel$: EventEmitter<void> = new EventEmitter<void>();
 
   @Output('submit')
-  get submit$(): EventEmitter<User> {
-    return this._submit$;
+  submit$: EventEmitter<User> = new EventEmitter<User>();
+
+  constructor(private formBuilder: FormBuilder) {
+    this.userForm = this._buildForm(); // Utilisation de la méthode _buildForm pour créer le FormGroup
   }
 
   cancel(): void {
-    this._cancel$.emit();
+    this.cancel$.emit();
   }
 
   submit(): void {
-    this._submit$.emit(this._user);
+    if (this.userForm.valid) {
+      const userData: User = this.userForm.value as User;
+      this.submit$.emit(userData);
+    }
   }
 
   private _buildForm(): FormGroup {
-    return new FormGroup({
-      user: new FormGroup({
-        username: new FormControl(this.user.username, Validators.required),
-        password: new FormControl(this.user.password, Validators.required)
-      })
+    return this.formBuilder.group({
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 }

@@ -18,6 +18,7 @@ export class AuthService {
     // this.authService.logIn(user).subscribe((response) => {
     //   // Traiter la réponse de la connexion ici
     // });
+    //console.log("Reached auth service");
     return this.http.post('/api/user/login', user);
   }
 }
