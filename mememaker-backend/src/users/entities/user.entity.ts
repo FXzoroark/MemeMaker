@@ -28,7 +28,7 @@ export class UserEntity {
     password: string
 
     constructor(partial: Partial<User>) {
-        this.user_id = partial.user_id;
+        //this.user_id = partial.user_id;
         this.username = partial.username;
         this.password = partial.password;
     }

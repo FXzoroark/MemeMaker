@@ -10,11 +10,11 @@ export type UserDocument = User & Document;
   versionKey: false
 })
 export class User {
-  @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    auto:true,
-  })
-  user_id: number;
+  // @Prop({
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   auto:true,
+  // })
+  // user_id: number;
 
   @Prop({
     type: String,
