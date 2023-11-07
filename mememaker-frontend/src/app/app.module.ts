@@ -75,7 +75,7 @@ import { FormSigninComponent } from './shared/form-signin/form-signin.component'
   ],
   providers: [
     {provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS},
-  AuthService],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

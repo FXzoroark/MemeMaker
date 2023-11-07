@@ -29,7 +29,6 @@ export class MemesComponent implements OnInit {
   ) {
     this._memes = [];
     this._dialogStatus = 'inactive';
-    this._changeDetectorRef.markForCheck
   }
 
     /**

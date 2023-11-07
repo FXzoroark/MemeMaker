@@ -25,6 +25,7 @@ export class UsersController {
   })
   @Post('signin') 
   signin(@Body() createUserDTO: CreateUserDTO): Observable<UserEntity> {
+    console.log("toto")
     return this._userService.create(createUserDTO);
   }
 }

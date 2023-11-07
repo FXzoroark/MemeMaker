@@ -12,15 +12,13 @@ export class DialogSigninComponent {
 
   constructor(
     private _dialogRef: MatDialogRef<DialogSigninComponent, User>,
-    private _authService: AuthService
   ) {}
 
   onCancel(): void{
     this._dialogRef.close();
   }
 
-  onSignIn(user: User) {
-    this._authService.signIn(user);
+  onSignIn(user: any) {
     this._dialogRef.close(user); 
   }
 

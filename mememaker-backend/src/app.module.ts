@@ -13,9 +13,7 @@ import { UsersDao } from './users/dao/users.dao';
     UsersModule,
     FilesModule,
     MongooseModule.forRoot(Config.get<string>('mongodb.uri')),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
-  controllers: [UsersController],
-  providers: [UsersDao, Logger],
+  providers: [Logger],
 })
 export class AppModule {}

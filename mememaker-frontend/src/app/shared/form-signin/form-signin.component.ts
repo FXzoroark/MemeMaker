@@ -10,24 +10,32 @@ import { User } from '../types/user.type';
 export class FormSigninComponent {
   userForm: FormGroup;
 
-  @Output('cancel')
-  cancel$: EventEmitter<void> = new EventEmitter<void>();
-
-  @Output('submit')
-  submit$: EventEmitter<User> = new EventEmitter<User>();
+  private readonly _cancel$: EventEmitter<void>;
+  private readonly _submit$: EventEmitter<User>;
 
   constructor(private formBuilder: FormBuilder) {
+    this._cancel$ = new EventEmitter<void>;
+    this._submit$ = new EventEmitter<User>
     this.userForm = this._buildForm(); // Utilisation de la méthode _buildForm pour créer le FormGroup
+  }
+  @Output('cancel')
+  get cancel$(): EventEmitter<void> {
+    return this._cancel$;
+  }
+
+  @Output('submit')
+  get submit$(): EventEmitter<User> {
+    return this._submit$;
   }
 
   cancel(): void {
-    this.cancel$.emit();
+    this._cancel$.emit();
   }
 
   submit(): void {
     if (this.userForm.valid) {
       const userData: User = this.userForm.value as User;
-      this.submit$.emit(userData);
+      this._submit$.emit(userData);
     }
   }
 

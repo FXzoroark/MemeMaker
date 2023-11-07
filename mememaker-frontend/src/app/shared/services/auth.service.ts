@@ -28,9 +28,7 @@ export class AuthService {
   }
 
   signIn(user: User): Observable<any> {
-    // console.log(`${this._backendURL.signin}`);
-    // console.log(user);
-    return this._http.post<User>(`${this._backendURL.signup}`, user, this._options());
+    return this._http.post<User>(this._backendURL.signin, user, this._options());
   }
 
   logIn(user: User): Observable<any> {
