@@ -39,7 +39,7 @@
                     <ng-container formArrayName="dragboxInputs" [class.mgb15]="form.get('dragboxInputs')?.invalid">
                         <ng-container  *ngFor="let dragboxInput of dragboxInputs.controls; let i = index" class="full-width" >
                             <div [formGroupName]="i" class="dragboxFields">
-                                <mat-form-field style="width: 30%;" [class.mgb15]="dragboxInput?.get('text')?.dirty && dragboxInput?.get('text')?.invalid">
+                                <mat-form-field style="width: 20%;" [class.mgb15]="dragboxInput?.get('text')?.dirty && dragboxInput?.get('text')?.invalid">
                                     <mat-label>Dragbox {{i}}</mat-label>
                                     <input matInput formControlName="text" name="{{i}}" required (input)="changeText($event,i)" />
                                 </mat-form-field>
