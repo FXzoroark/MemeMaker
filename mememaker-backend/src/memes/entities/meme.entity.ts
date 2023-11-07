@@ -79,6 +79,6 @@ export class MemeEntity {
         this.createdAt = partial.created_at;
         this.updatedAt = partial.updated_at;
         this.path = partial.path;
-        this.dragboxesDatas = partial.dragboxesDatas.map((datas) => ({id: datas._id, left: datas.left, top: datas.top, rot: datas.rot, width: datas.width, height: datas.height, contentDatas: {text: datas.contentDatas.text || "", fontSize: datas.contentDatas.fontSize}}))
+        this.dragboxesDatas = partial.dragboxesDatas.map((datas) => ({id: datas._id, left: datas.left, top: datas.top, rot: datas.rot, width: datas.width, height: datas.height, contentDatas: {text: datas.contentDatas.text || "", fontSize: datas.contentDatas.fontSize, color: datas.contentDatas.color}}))
     }
 }

@@ -29,14 +29,17 @@ canvas{
     top: 0; 
 } */
 
-/* .dragboxFields {
+.dragboxFields {
     display: flex;
     align-items: flex-start;
-} */
+}
 
 .full-width {
     width: 100%;
   }
+.semi-width {
+    width: 50%;
+}
 
 @font-face {
     font-family: 'Impact';

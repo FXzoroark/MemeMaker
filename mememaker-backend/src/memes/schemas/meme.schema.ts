@@ -74,12 +74,17 @@ export class Meme {
           fontSize: {
             type: Number,
             required: true,
+          },
+          color: {
+            type: String,
+            required: true,
+            //match: /^(rgba(\d+,\d+,\d+,\d+))$/, //trouver un regex qui marche 
           }
 
         }),
       }]
     })
-    dragboxesDatas: {_id:any, left: number, top: number, rot: number, width: number, height: number, contentDatas: {text: string, fontSize: number}}[];
+    dragboxesDatas: {_id:any, left: number, top: number, rot: number, width: number, height: number, contentDatas: {text: string, fontSize: number, color: string}}[];
 }
 
 export const MemeSchema = SchemaFactory.createForClass(Meme);
