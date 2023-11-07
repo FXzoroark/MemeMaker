@@ -14,9 +14,10 @@
                         </mat-card>
                     </div> 
                 </td>
-                <td>
+                <td style="vertical-align: top;">
                     <mat-form-field class="full-width" [class.mgb15]="form.get('title')?.dirty && form.get('title')?.invalid">
-                        <input matInput placeholder="Title" formControlName="title" minlength="2" required name="title" />
+                        <mat-label>Title</mat-label>
+                        <input matInput placeholder="Ex. My Custom Meme" formControlName="title" minlength="2" required name="title" />
                         <mat-error *ngIf="form.get('title')?.dirty && form.get('title')?.hasError('required')">
                             Title is <strong>required</strong>
                         </mat-error>
@@ -29,23 +30,38 @@
                     </mat-form-field>
 
                     <mat-form-field *ngIf="!isCreateTemplate" class="full-width" [class.mgb15]="form.get('description')?.dirty && form.get('description')?.invalid">
-                        <input matInput placeholder="Description" formControlName="description" name="description" />
+                        <mat-label>Description</mat-label>
+                        <input matInput placeholder="Ex. This meme is about..." formControlName="description" name="description" />
                         <mat-error *ngIf="form.get('description')?.dirty && form.get('description')?.hasError('maxlength')">
                             Description is <strong>255 chars max</strong>
                         </mat-error>
                     </mat-form-field>
                     <ng-container formArrayName="dragboxInputs" [class.mgb15]="form.get('dragboxInputs')?.invalid">
                         <ng-container  *ngFor="let dragboxInput of dragboxInputs.controls; let i = index" class="full-width" >
-                            <div [formGroupName]="i">
-                                <mat-form-field [class.mgb15]="dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.invalid">
-                                    <input matInput placeholder="DragBox {{i}}" formControlName="content" name="{{i}}" (input)="change($event,i)" />
-                                    <mat-error *ngIf="!isCreateTemplate && dragboxInput?.get('content')?.dirty && dragboxInput?.get('content')?.hasError('required')">
-                                        Dragbox content is <strong>required</strong>
-                                    </mat-error>
+                            <div [formGroupName]="i" class="dragboxFields">
+                                <mat-form-field style="width: 50%;" [class.mgb15]="dragboxInput?.get('text')?.dirty && dragboxInput?.get('text')?.invalid">
+                                    <mat-label>Dragbox {{i}}</mat-label>
+                                    <input matInput formControlName="text" name="{{i}}" required (input)="changeText($event,i)" />
+                                </mat-form-field>
+                                <mat-form-field style="width: 20%;" [class.mgb15]="dragboxInput?.get('fontSize')?.dirty && dragboxInput?.get('fontSize')?.invalid">
+                                    <mat-label>Font Size</mat-label>
+                                    <input matInput type="number" required min="1" max="100" formControlName="fontSize" name="{{i}}" value="dragboxInput?.get('fontSize').value" (input)="changeFontSize($event, i)" />
                                 </mat-form-field>
                                 <button mat-button title="Delete" (click)="deleteDragbox(i)">
                                     <mat-icon svgIcon="icon-delete"></mat-icon>
                                 </button>
+                                <mat-error *ngIf="!isCreateTemplate && dragboxInput?.get('text')?.dirty && dragboxInput?.get('text')?.hasError('required')">
+                                    Dragbox content is <strong>required</strong>
+                                </mat-error>
+                                <mat-error *ngIf="dragboxInput?.get('fontSize')?.dirty && dragboxInput?.get('fontSize')?.hasError('required')">
+                                    fontSize is required
+                                </mat-error>
+                                <mat-error *ngIf="dragboxInput?.get('fontSize')?.dirty && dragboxInput?.get('fontSize')?.hasError('min')">
+                                    fontSize need to be min 1
+                                </mat-error>
+                                <mat-error *ngIf="dragboxInput?.get('fontSize')?.dirty && dragboxInput?.get('fontSize')?.hasError('max')">
+                                    fontSize need to be max 100
+                                </mat-error>
                             </div>
                         </ng-container>
                         <mat-error *ngIf="form.get('dragboxInputs')?.hasError('minlength')">

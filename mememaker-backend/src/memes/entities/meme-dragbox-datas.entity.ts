@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Exclude, Expose, Type } from "class-transformer";
+import {DragboxContentDatasEntity } from "./dragbox-content-datas.entity";
+import { IsObject, isObject } from "class-validator";
 
 @Exclude()
 export class MemeDragboxDatasEntity {
@@ -59,11 +61,10 @@ export class MemeDragboxDatasEntity {
     height: number;
 
     @ApiPropertyOptional({
-        name:"content",
-        description: "The text field inside the dragbox",
-        example: 'PRESS THE RIGHT BUTTON'
+        name:"contentDatas",
+        description: "contentDatas inside the dragbox",
     })
     @Expose()
-    @Type(() => String)
-    content: string;
+    @Type(() => DragboxContentDatasEntity)
+    contentDatas: DragboxContentDatasEntity;
 }

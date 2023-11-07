@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild, EventEmitter, Output, OnInit, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { DragboxData } from '../types/dragboxData.type';
+import { DragboxDatas } from '../types/dragboxDatas.type';
 import { NgxMoveableComponent } from 'ngx-moveable'
 
 @Component({
@@ -13,9 +13,9 @@ export class DragboxComponent{
   @ViewChild("moveableRef")
   moveable!: NgxMoveableComponent;
 
-  private _dragboxData: DragboxData;
+  private _dragboxData: DragboxDatas;
   
-  private readonly _update$: EventEmitter<DragboxData>;
+  private readonly _update$: EventEmitter<DragboxDatas>;
   
   draggable: any = true;
   throttleDrag: any = 1;
@@ -34,12 +34,12 @@ export class DragboxComponent{
   origin: any = true;
 
   constructor(){
-    this._dragboxData = {} as DragboxData;
-    this._update$ = new EventEmitter<DragboxData>();
+    this._dragboxData = {} as DragboxDatas;
+    this._update$ = new EventEmitter<DragboxDatas>();
   }
 
   @Input()
-  set dragboxData(dragboxData: DragboxData){
+  set dragboxData(dragboxData: DragboxDatas){
     this._dragboxData = dragboxData;
   }
 
@@ -47,7 +47,7 @@ export class DragboxComponent{
     return this._dragboxData
   }
 
-  @Output("updateDragboxData") get update$(): EventEmitter<DragboxData>{
+  @Output("updateDragboxData") get update$(): EventEmitter<DragboxDatas>{
     return this._update$;
   }
   

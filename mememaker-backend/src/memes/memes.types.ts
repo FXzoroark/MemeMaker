@@ -16,5 +16,10 @@ export type DragboxDatas = {
     rot: number;
     width: number;
     height: number;
-    content?: string;
+    content: ContentDatas;
 };
+
+export type ContentDatas = {
+    text?: string;
+    fontSize: number;
+}

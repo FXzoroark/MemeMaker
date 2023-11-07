@@ -17,9 +17,9 @@ canvas{
     justify-content: center;
     align-items: center; 
     width: 400px;
-    height: 600px;
+    height: 400px;
     /* text-align: left; */
-    /position: relative; 
+    position: relative; 
 }
 /* .container canvas{
     max-width: 100%;
@@ -27,6 +27,11 @@ canvas{
     position: relative;
     left: 0;
     top: 0; 
+} */
+
+/* .dragboxFields {
+    display: flex;
+    align-items: flex-start;
 } */
 
 .full-width {

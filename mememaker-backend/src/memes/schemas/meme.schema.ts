@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose'
 import { Document } from 'mongoose';
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, raw, Schema, SchemaFactory } from "@nestjs/mongoose";
 
 
 export type MemeDocument = Meme & Document;
@@ -67,10 +67,19 @@ export class Meme {
         rot: {type: Number, required: true},
         width: {type: Number, required: true},
         height: {type: Number, required: true},
-        content: {type: String,},
+        contentDatas: raw({
+          text: {
+            type: String
+          },
+          fontSize: {
+            type: Number,
+            required: true,
+          }
+
+        }),
       }]
     })
-    dragboxesDatas: {_id:any, left: number, top: number, rot: number, width: number, height: number, content?: string}[];
+    dragboxesDatas: {_id:any, left: number, top: number, rot: number, width: number, height: number, contentDatas: {text: string, fontSize: number}}[];
 }
 
 export const MemeSchema = SchemaFactory.createForClass(Meme);

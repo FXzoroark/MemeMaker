@@ -1,4 +1,4 @@
-import { DragboxData } from "./dragboxData.type"
+import { DragboxDatas } from "./dragboxDatas.type"
 
 export type Meme = {
     id?: string;
@@ -8,5 +8,5 @@ export type Meme = {
     createdAt?: string;
     updatedAt?: string;
     path?: string;
-    dragboxesDatas: DragboxData[];
+    dragboxesDatas: DragboxDatas[];
 }

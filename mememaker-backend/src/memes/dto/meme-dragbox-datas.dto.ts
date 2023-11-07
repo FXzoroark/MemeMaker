@@ -1,10 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsInstance, IsNotEmpty, IsNumber, ValidateNested } from "class-validator";
+import { DragboxContentDatasDTO } from "./dragbox-content-datas.dto";
+import { Type } from "class-transformer";
 
 export class MemeDragboxDatasDTO {
     @ApiProperty({
         description: "The left css property for the position of the dragbox on the meme",
-        example: 50
+        example: 40
     })
     @IsNumber()
     @IsNotEmpty()
@@ -43,10 +45,13 @@ export class MemeDragboxDatasDTO {
     height: number;
 
     @ApiProperty({
-        description: "The text field inside the dragbox",
+        description: "Content datas inside the dragbox",
         example: 'PRESS THE RIGHT BUTTON'
     })
-    @IsString()
     @IsNotEmpty()
-    content: string;
+    @IsInstance(DragboxContentDatasDTO)
+    @ValidateNested()
+    @Type(() => DragboxContentDatasDTO)
+    contentDatas: DragboxContentDatasDTO;
+
 }

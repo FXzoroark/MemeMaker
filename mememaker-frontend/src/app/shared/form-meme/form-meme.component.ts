@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { Canvas, createCanvas, loadImage } from 'canvas';
-import { DragboxData } from '../types/dragboxData.type';
+import { DragboxDatas } from '../types/dragboxDatas.type';
 import { Meme } from '../types/meme.type';
 import { FormArray, FormBuilder, FormControl, FormGroup, MinLengthValidator, ValidatorFn, Validators } from '@angular/forms';
 import { MemeSelected } from '../types/meme-selected.type';
@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { text } from 'stream/consumers';
 import { drawText } from 'canvas-txt';
 import { MemeToProcess } from '../types/meme-to-process.type';
+import { ContentDatas } from '../types/contentDatas.type';
 
 @Component({
   selector: 'app-form-meme',
@@ -20,8 +21,8 @@ export class FormMemeComponent implements OnChanges{
 
   private _blankCanvas!: Canvas;
   private _memeSelected: MemeSelected;
-  private _dragboxesDatasInit: DragboxData[];
-  private _dragboxesDatas: DragboxData[];
+  private _dragboxesDatasInit: DragboxDatas[];
+  private _dragboxesDatas: DragboxDatas[];
   private _ratioCanvasX!: number;
   private _ratioCanvasY!: number;
   private _fontSize: number;
@@ -103,8 +104,8 @@ export class FormMemeComponent implements OnChanges{
   
       let displayedctx: any = this.canvas.nativeElement.getContext("2d");
       displayedctx.drawImage(img, 0, 0)
-      displayedctx.font = this._fontSize+'px Impact';
-      displayedctx.fillStyle = 'black';
+      // displayedctx.font = this._fontSize+'px Impact';
+      // displayedctx.fillStyle = 'black';
       displayedctx.save();
 
       let blankctx: any = this._blankCanvas.getContext("2d")
@@ -130,7 +131,7 @@ export class FormMemeComponent implements OnChanges{
       //dragbox need to be empty if we want to create a template
       this._validatorDragboxFn = this._isCreateTemplate ? Validators.compose([Validators.maxLength(0)]) : Validators.compose([Validators.required]) 
       //add inputs for every dragboxes
-      this.dragboxesDatas.forEach((dragbox)=> this._addDragboxFormControl(dragbox.content))
+      this._dragboxesDatas.forEach((dragbox)=> this._addDragboxFormControl(dragbox.contentDatas))
 
       this.updateCanvas();
 
@@ -139,7 +140,7 @@ export class FormMemeComponent implements OnChanges{
   }
 
   private _initDragboxes(): void{
-    this._memeSelected.meme.dragboxesDatas.forEach((dragbox: DragboxData) => {
+    this._memeSelected.meme.dragboxesDatas.forEach((dragbox: DragboxDatas) => {
       this._dragboxesDatasInit.push({...dragbox, left: dragbox.left*this._ratioCanvasX, top: dragbox.top*this._ratioCanvasY, width: dragbox.width*this._ratioCanvasX, height: dragbox.height*this._ratioCanvasY})
     })
   }
@@ -147,13 +148,10 @@ export class FormMemeComponent implements OnChanges{
   updateCanvas(): void {
     let displayedctx: any = this.canvas.nativeElement.getContext("2d")!;
     displayedctx.drawImage(this._blankCanvas, 0, 0)
-    displayedctx.beginPath();
-    displayedctx.arc(52, 106, 5, Math.PI * 2, true)
-    displayedctx.stroke()
     this._dragboxesDatas.forEach(dragbox => {
       displayedctx.translate(dragbox.left/this._ratioCanvasX, dragbox.top/this._ratioCanvasY)
       displayedctx.rotate(dragbox.rot * Math.PI/180)
-      drawText(displayedctx, dragbox.content, {x:0, y:0 , width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, fontSize:this._fontSize, lineHeight: this._fontHeight})
+      drawText(displayedctx, this._isCreateTemplate ? "Placeholder" : dragbox.contentDatas.text, {x:0, y:0 , width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, fontSize:dragbox.contentDatas.fontSize, lineHeight: this._fontHeight})
       displayedctx.setTransform(1,0,0,1,0,0);
 
       // let textBuffer = dragbox.content
@@ -176,18 +174,22 @@ export class FormMemeComponent implements OnChanges{
 
   }
 
-  updateDragboxData(updatedDragboxDatas: DragboxData): void {
+  updateDragboxData(updatedDragboxDatas: DragboxDatas): void {
     //update the dragbox in the list and keep the content value which is not updated in the dragbox component
     //console.log(this.dragboxesDatas)
-    this._dragboxesDatas = this._dragboxesDatas.map(dragboxDatas => dragboxDatas.id == updatedDragboxDatas.id ? {...updatedDragboxDatas, content:dragboxDatas.content} : dragboxDatas);
+    this._dragboxesDatas = this._dragboxesDatas.map(dragboxDatas => dragboxDatas.id == updatedDragboxDatas.id ? {...updatedDragboxDatas, contentDatas:dragboxDatas.contentDatas} : dragboxDatas);
     
     this.updateCanvas();
   }
 
-  change(event: any, i: number): void{
-    this._dragboxesDatas[i].content = event.target.value;
+  changeText(event: any, i: number): void{
+    this._dragboxesDatas[i].contentDatas.text = event.target.value;
     this.updateCanvas()
-    
+  }
+  
+  changeFontSize(event: any, i: number): void{
+    this._dragboxesDatas[i].contentDatas.fontSize = <number>event.target.value;
+    this.updateCanvas();
   }
 
   cancel(): void{
@@ -195,14 +197,16 @@ export class FormMemeComponent implements OnChanges{
   }
 
   submit(formDatas: any): void{
-    let resizedDragboxesDatas: DragboxData[] = [];
+    let resizedDragboxesDatas: DragboxDatas[] = [];
     this._dragboxesDatas.forEach((dragbox) => {
-      resizedDragboxesDatas.push({left: dragbox.left/this._ratioCanvasX, top: dragbox.top/this._ratioCanvasY, rot:dragbox.rot, width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, content: dragbox.content})
+      resizedDragboxesDatas.push({left: dragbox.left/this._ratioCanvasX, top: dragbox.top/this._ratioCanvasY, rot:dragbox.rot, width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, contentDatas: dragbox.contentDatas})
     })
     if(this._isUpdateMode){
       this._submit$.emit({meme:{id: this._memeSelected.meme.id, title: formDatas.title, description: formDatas.description, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement})
     }
     else if(this._isCreateTemplate){
+      let displayedctx: any = this.canvas.nativeElement.getContext("2d")!; //remove placeholder
+      displayedctx.drawImage(this._blankCanvas, 0, 0)
       this._submit$.emit({meme: {title: formDatas.title, dragboxesDatas:resizedDragboxesDatas}, canvas: this.canvas.nativeElement})
     }
     else{
@@ -211,10 +215,10 @@ export class FormMemeComponent implements OnChanges{
   }
 
   addDragbox(): void{
-    let newDragbox = {id: Date.now().toString(), left: 100*this._ratioCanvasX, top: 100*this._ratioCanvasY, rot:0, width: 100*this._ratioCanvasX, height: 100*this._ratioCanvasY, content:""}
+    let newDragbox = {id: Date.now().toString(), left: 100*this._ratioCanvasX, top: 100*this._ratioCanvasY, rot:0, width: 100*this._ratioCanvasX, height: 100*this._ratioCanvasY, contentDatas: {text: "", fontSize:40}}
     this._dragboxesDatas.push(newDragbox)
     this._dragboxesDatasInit = this.dragboxesDatas;
-    this._addDragboxFormControl(newDragbox.content)
+    this._addDragboxFormControl(newDragbox.contentDatas)
   }
 
   deleteDragbox(index: number): void{
@@ -245,9 +249,10 @@ export class FormMemeComponent implements OnChanges{
     });
   }
 
-  private _addDragboxFormControl(content: string): void {
+  private _addDragboxFormControl(contentDatas: ContentDatas): void {
     this.dragboxInputs.push(this._fb.group({
-      content: [{value: content, disabled:this._isCreateTemplate}, this._validatorDragboxFn]
+      text: [{value: contentDatas.text, disabled:this._isCreateTemplate}, this._validatorDragboxFn],
+      fontSize: [contentDatas.fontSize, Validators.compose([Validators.required, Validators.min(1), Validators.max(100)])]
     }));
   }
 

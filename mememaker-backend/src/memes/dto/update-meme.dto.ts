@@ -26,4 +26,5 @@ export class UpdateMemeDTO {
     @ArrayMaxSize(10)
     @Type(() => MemeDragboxDatasDTO)
     dragboxesDatas: MemeDragboxDatasDTO[];
+    
 }

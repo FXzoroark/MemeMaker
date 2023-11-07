@@ -82,7 +82,7 @@ export class MemesComponent implements OnInit {
 
             this._memeDialog = this._dialog.open(DialogMemeComponent, {
               position:{left: "20%"},
-              width: '60%',
+              width: '70%',
               disableClose: true,
               data: memeSelected
             });
