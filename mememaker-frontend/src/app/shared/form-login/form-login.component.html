@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-content>
+    <h2 mat-dialog-title>Log in</h2>
+    <mat-dialog-content>
+      <form novalidate [formGroup]="userForm">
+        <mat-form-field>
+          <input matInput placeholder="Username" formControlName="username">
+        </mat-form-field>
+        <mat-error *ngIf="userForm.get('username')?.hasError('required')">Username is required</mat-error>
+        <mat-error *ngIf="userForm.get('username')?.hasError('minlength')">Username must have at least 3 characters</mat-error>
+        <mat-error *ngIf="userForm.get('username')?.hasError('maxlength')">Username cannot exceed 20 characters</mat-error>
+        <mat-form-field>
+          <input matInput placeholder="Password" type="password" formControlName="password">
+        </mat-form-field>
+        <mat-error *ngIf="userForm.get('password')?.hasError('required')">Password is required</mat-error>
+        <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">Password must have at least 8 characters</mat-error>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="cancel()">Cancel</button>
+      <button mat-button color="primary" type="submit" (click)="submit()" [disabled]="userForm.invalid">Login</button>
+    </mat-dialog-actions>
+  </mat-card-content>
+</mat-card>
+
+
+
+  
+  

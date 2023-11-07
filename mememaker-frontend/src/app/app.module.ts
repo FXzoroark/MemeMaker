@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon';
 
 import { NgxMoveableModule } from 'ngx-moveable';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -30,6 +30,11 @@ import { FormUploadTemplateComponent } from './shared/form-upload-template/form-
 import { FileDragAndDropDirective } from './shared/directives/file-drag-and-drop.directive';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MAT_COLOR_FORMATS, NGX_MAT_COLOR_FORMATS, NgxMatColorPickerModule } from '@angular-material-components/color-picker';
+import { AuthService } from './shared/services/auth.service';
+import { DialogLoginComponent } from './shared/dialog-login/dialog-login.component';
+import { FormLoginComponent } from './shared/form-login/form-login.component';
+import { DialogSigninComponent } from './shared/dialog-signin/dialog-signin.component';
+import { FormSigninComponent } from './shared/form-signin/form-signin.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +49,11 @@ import { MAT_COLOR_FORMATS, NGX_MAT_COLOR_FORMATS, NgxMatColorPickerModule } fro
     CardComponent,
     UpdateComponent,
     FormUploadTemplateComponent,
-    FileDragAndDropDirective
+    FileDragAndDropDirective,
+    DialogLoginComponent,
+    FormLoginComponent,
+    DialogSigninComponent,
+    FormSigninComponent
   ],
   imports: [
     BrowserModule,
@@ -61,11 +70,12 @@ import { MAT_COLOR_FORMATS, NGX_MAT_COLOR_FORMATS, NgxMatColorPickerModule } fro
     MatFormFieldModule,
     NgxMoveableModule,
     NgxMatFileInputModule,
-    NgxMatColorPickerModule
+    NgxMatColorPickerModule,
+    FormsModule
   ],
   providers: [
-    {provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS}
-  ],
+    {provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS},
+  AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
