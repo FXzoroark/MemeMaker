@@ -44,7 +44,7 @@
                                     <input matInput formControlName="text" name="{{i}}" required (input)="changeText($event,i)" />
                                 </mat-form-field>
                                 <mat-form-field  style="width: 20%" [class.mgb15]="dragboxInput?.get('color')?.dirty && dragboxInput?.get('color')?.invalid" >
-                                    <input [disabled]="true" [style.background-color]="dragboxInput?.get('color')?.value?.rgba" matInput [ngxMatColorPicker]="picker" formControlName="color">
+                                    <input (input)="changeColor(i)" [style.background-color]="dragboxInput?.get('color')?.value?.rgba" matInput [ngxMatColorPicker]="picker" formControlName="color">
                                     <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
                                     <ngx-mat-color-picker (closed)="changeColor(i)" #picker></ngx-mat-color-picker>
                                 </mat-form-field>

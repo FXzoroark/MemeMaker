@@ -195,8 +195,10 @@ export class FormMemeComponent implements OnChanges{
   }
 
   changeColor(i: number): void{
-    this._dragboxesDatas[i].contentDatas.color = this._form.controls["dragboxInputs"].value[i].color.rgba
-    this.updateCanvas();
+    if(this._form.controls["dragboxInputs"].valid){
+      this._dragboxesDatas[i].contentDatas.color = this._form.controls["dragboxInputs"].value[i].color.rgba
+      this.updateCanvas();
+    }
   }
 
   cancel(): void{
