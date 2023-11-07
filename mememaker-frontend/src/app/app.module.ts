@@ -29,6 +29,7 @@ import { UpdateComponent } from './update/update.component';
 import { FormUploadTemplateComponent } from './shared/form-upload-template/form-upload-template.component';
 import { FileDragAndDropDirective } from './shared/directives/file-drag-and-drop.directive';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { MAT_COLOR_FORMATS, NGX_MAT_COLOR_FORMATS, NgxMatColorPickerModule } from '@angular-material-components/color-picker';
 import { AuthService } from './shared/services/auth.service';
 import { DialogLoginComponent } from './shared/dialog-login/dialog-login.component';
 import { FormLoginComponent } from './shared/form-login/form-login.component';
@@ -69,9 +70,12 @@ import { FormSigninComponent } from './shared/form-signin/form-signin.component'
     MatFormFieldModule,
     NgxMoveableModule,
     NgxMatFileInputModule,
+    NgxMatColorPickerModule,
     FormsModule
   ],
-  providers: [AuthService],
+  providers: [
+    {provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS},
+  AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

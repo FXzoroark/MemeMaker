@@ -9,6 +9,7 @@ import { text } from 'stream/consumers';
 import { drawText } from 'canvas-txt';
 import { MemeToProcess } from '../types/meme-to-process.type';
 import { ContentDatas } from '../types/contentDatas.type';
+import { Color } from '@angular-material-components/color-picker'
 
 @Component({
   selector: 'app-form-meme',
@@ -151,10 +152,11 @@ export class FormMemeComponent implements OnChanges{
     this._dragboxesDatas.forEach(dragbox => {
       displayedctx.translate(dragbox.left/this._ratioCanvasX, dragbox.top/this._ratioCanvasY)
       displayedctx.rotate(dragbox.rot * Math.PI/180)
+      displayedctx.fillStyle = dragbox.contentDatas.color
       drawText(displayedctx, this._isCreateTemplate ? "Placeholder" : dragbox.contentDatas.text, {x:0, y:0 , width: dragbox.width/this._ratioCanvasX, height: dragbox.height/this._ratioCanvasY, fontSize:dragbox.contentDatas.fontSize, lineHeight: this._fontHeight})
       displayedctx.setTransform(1,0,0,1,0,0);
 
-      // let textBuffer = dragbox.content
+      // let textBuffer = dragbox.contentDatas.text
       // for(let i=1 ; i < dragbox.height/this._fontHeight +1; i++){ // de la première ligne a la dernière ligne possible
       //   let shard = textBuffer;
       //   textBuffer = "";
@@ -192,6 +194,11 @@ export class FormMemeComponent implements OnChanges{
     this.updateCanvas();
   }
 
+  changeColor(i: number): void{
+    this._dragboxesDatas[i].contentDatas.color = this._form.controls["dragboxInputs"].value[i].color.rgba
+    this.updateCanvas();
+  }
+
   cancel(): void{
     this._cancel$.emit();
   }
@@ -215,7 +222,7 @@ export class FormMemeComponent implements OnChanges{
   }
 
   addDragbox(): void{
-    let newDragbox = {id: Date.now().toString(), left: 100*this._ratioCanvasX, top: 100*this._ratioCanvasY, rot:0, width: 100*this._ratioCanvasX, height: 100*this._ratioCanvasY, contentDatas: {text: "", fontSize:40}}
+    let newDragbox = {id: Date.now().toString(), left: 100*this._ratioCanvasX, top: 100*this._ratioCanvasY, rot:0, width: 100*this._ratioCanvasX, height: 100*this._ratioCanvasY, contentDatas: {text: "", fontSize:40, color:"rgba(0,0,0,1)"}}
     this._dragboxesDatas.push(newDragbox)
     this._dragboxesDatasInit = this.dragboxesDatas;
     this._addDragboxFormControl(newDragbox.contentDatas)
@@ -250,10 +257,13 @@ export class FormMemeComponent implements OnChanges{
   }
 
   private _addDragboxFormControl(contentDatas: ContentDatas): void {
+    const rgba = contentDatas.color?.match(/\d+/g)
     this.dragboxInputs.push(this._fb.group({
       text: [{value: contentDatas.text, disabled:this._isCreateTemplate}, this._validatorDragboxFn],
-      fontSize: [contentDatas.fontSize, Validators.compose([Validators.required, Validators.min(1), Validators.max(100)])]
+      fontSize: [contentDatas.fontSize, Validators.compose([Validators.required, Validators.min(1), Validators.max(100)])],
+      color: [new Color(parseInt(rgba![0]), parseInt(rgba![1]), parseInt(rgba![2]), parseInt(rgba![3])), Validators.compose([Validators.required])]
     }));
+    this._form.updateValueAndValidity()
   }
 
   private _deleteDragboxFormControl(index: number): void {

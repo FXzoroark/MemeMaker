@@ -40,7 +40,7 @@ export class FormUploadTemplateComponent {
   }
 
   submit(file: File): void {
-    this._submit$.emit({meme: {title: file.name.split(".")[0], dragboxesDatas: [{left:10, top:10, rot:0, width:100, height:100, contentDatas:{text: "", fontSize: 40}}]}, canvaUrl: URL.createObjectURL(file)});
+    this._submit$.emit({meme: {title: file.name.split(".")[0], dragboxesDatas: [{left:10, top:10, rot:0, width:100, height:100, contentDatas:{text: "", fontSize: 40, color:"rgba(0,0,0,1)"}}]}, canvaUrl: URL.createObjectURL(file)});
   }
 
   onFileDropped(fileList: any){
