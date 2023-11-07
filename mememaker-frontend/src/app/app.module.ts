@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon';
 
 import { NgxMoveableModule } from 'ngx-moveable';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -29,6 +29,11 @@ import { UpdateComponent } from './update/update.component';
 import { FormUploadTemplateComponent } from './shared/form-upload-template/form-upload-template.component';
 import { FileDragAndDropDirective } from './shared/directives/file-drag-and-drop.directive';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { AuthService } from './shared/services/auth.service';
+import { DialogLoginComponent } from './shared/dialog-login/dialog-login.component';
+import { FormLoginComponent } from './shared/form-login/form-login.component';
+import { DialogSigninComponent } from './shared/dialog-signin/dialog-signin.component';
+import { FormSigninComponent } from './shared/form-signin/form-signin.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +48,11 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     CardComponent,
     UpdateComponent,
     FormUploadTemplateComponent,
-    FileDragAndDropDirective
+    FileDragAndDropDirective,
+    DialogLoginComponent,
+    FormLoginComponent,
+    DialogSigninComponent,
+    FormSigninComponent
   ],
   imports: [
     BrowserModule,
@@ -59,9 +68,10 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     MatSelectModule,
     MatFormFieldModule,
     NgxMoveableModule,
-    NgxMatFileInputModule
+    NgxMatFileInputModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

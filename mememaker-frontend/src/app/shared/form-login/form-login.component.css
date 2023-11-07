@@ -1,0 +1,38 @@
+mat-card{
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    max-width: 100%;
+    max-height: 100%;
+}
+canvas{
+    position: relative;
+    top: 0;
+    left: 0;
+    /* max-width: 100%;
+    max-height: 100%; */
+}
+
+.container {
+    justify-content: center;
+    align-items: center; 
+    width: 400px;
+    height: 600px;
+    /* text-align: left; */
+}
+/* .container canvas{
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+    left: 0;
+    top: 0; 
+} */
+
+.full-width {
+    width: 100%;
+  }
+
+@font-face {
+    font-family: 'Impact';
+    src: url('https://fonts.cdnfonts.com/css/impact');
+}
