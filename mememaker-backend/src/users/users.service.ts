@@ -1,18 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from './users.model';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { UsersDao } from './dao/users.dao';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { UserEntity } from './entities/user.entity';
+import { CreateUserDTO } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<UserDocument>) {}
 
-  async create(user: UserDocument): Promise<UserDocument> {
-    const newUser = new this.userModel(user);
-    return await newUser.save();
-  }
+  constructor(private readonly _usersDao: UsersDao) {}
 
-  async findOne(username: string): Promise<UserDocument | null> {
-    return await this.userModel.findOne({ username }).exec();
-  }
+  create = (user: CreateUserDTO): Observable<UserEntity> =>
+        this._usersDao.save(user).pipe(
+            catchError(
+                (e) => throwError(() => new UnprocessableEntityException(e.message)),
+            ),
+            map((userCreated) => new UserEntity(userCreated)),
+        );
 }
