@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../types/user.type';
 import { environment } from 'src/environments/environment';
@@ -28,10 +28,21 @@ export class AuthService {
   }
 
   signIn(user: User): Observable<any> {
-    return this._http.post(`${this._backendURL.signup}`, user);
+    // console.log(`${this._backendURL.signin}`);
+    // console.log(user);
+    return this._http.post<User>(`${this._backendURL.signup}`, user, this._options());
   }
 
   logIn(user: User): Observable<any> {
-    return this._http.post(`${this._backendURL.login}`, user);
+    return this._http.post<User>(`${this._backendURL.login}`, user, this._options());
+  }
+
+
+  private _options(headerList: object = {}): any {
+    return {
+      headers: new HttpHeaders(
+        Object.assign({ 'Content-Type': 'application/json' }, headerList)
+      ),
+    };
   }
 }

@@ -20,8 +20,7 @@ export class DialogSigninComponent {
   }
 
   onSignIn(user: User) {
-    //console.log(user);
-    //this._authService.logIn(user);
+    this._authService.signIn(user);
     this._dialogRef.close(user); 
   }
 
