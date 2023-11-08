@@ -66,7 +66,10 @@ export class MemeEntity {
     @Type(() => String)
     path: string;
 
-    @ApiProperty()
+    @ApiProperty({
+        name:"dragboxesDatas",
+        type: MemeDragboxDatasEntity,
+    })
     @Expose()
     @Type(() => MemeDragboxDatasEntity)
     dragboxesDatas: MemeDragboxDatasEntity[];
